@@ -41,7 +41,7 @@ class Run:
     def do(self):
         self.Al.frameX = (self.Al.frameX + 1) % 8
         self.Al.frameY = 2
-        self.Al.x += self.Al.dir * 5
+        self.Al.x += self.Al.dir * 10
 
     def draw(self):
         # 화면 출력 시 바라보는 방향(face_dir)을 사용해서 멈춰있을 때도 올바른 뒤집기 유지
