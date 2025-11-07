@@ -147,6 +147,12 @@ class Jondahl_Run:
         self.Jondahl.frameX = (self.Jondahl.frameX + 1) % 17
         self.Jondahl.x += self.Jondahl.dir * 10
 
+        img = self.Jondahl.images['Jondahl_Run'][int(self.Jondahl.frameX)]
+        if self.Jondahl.x < img.w / 2:
+            self.Jondahl.x = img.w / 2
+        elif self.Jondahl.x > 1280 - img.w / 2:
+            self.Jondahl.x = 1280 - img.w / 2
+
     def draw(self):
         # 원본 크기로 중앙 정렬하여 그려 좌우 흔들림을 제거 (스케일링 없음)
         img = self.Jondahl.images['Jondahl_Run'][int(self.Jondahl.frameX)]

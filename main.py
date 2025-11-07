@@ -48,10 +48,10 @@ def reset_world():
 
     world = []
 
-    player1 = player1_character.Al()
+    player1 = player1_character.Jondahl()
     world.append(player1)
 
-    player2 = player2_character.Al()
+    player2 = player2_character.Jondahl()
     world.append(player2)
 
 
