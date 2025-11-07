@@ -49,7 +49,7 @@ def reset_world():
 
     world = []
 
-    player1 = player1_character.Zizou_Olympia()
+    player1 = player1_character.Franzer()
     world.append(player1)
 
     player2 = player2_character.Zizou_Olympia()
