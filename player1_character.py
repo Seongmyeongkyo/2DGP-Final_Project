@@ -154,7 +154,7 @@ class Jondahl_Run:
 
     def do(self):
         self.Jondahl.frameX = (self.Jondahl.frameX + 1) % 17
-        self.Jondahl.x += self.Jondahl.dir * 10
+        self.Jondahl.x += self.Jondahl.dir * RUN_SPEED_PPS * game_framework.frame_time
 
         img = self.Jondahl.images['Jondahl_Run'][int(self.Jondahl.frameX)]
         if self.Jondahl.x < img.w / 2:
@@ -259,7 +259,7 @@ class Zizou_Olympia_Run:
         self.Zizou_Olympia.frameX = (self.Zizou_Olympia.frameX + 1) % 6
 
         # 이동 처리
-        self.Zizou_Olympia.x += self.Zizou_Olympia.dir * 10
+        self.Zizou_Olympia.x += self.Zizou_Olympia.dir * RUN_SPEED_PPS * game_framework.frame_time
 
         img = self.Zizou_Olympia.images['Zizou Olympia_Run'][int(self.Zizou_Olympia.frameX)]
         if self.Zizou_Olympia.x < img.w / 2:
@@ -365,7 +365,7 @@ class Franzer_Run:
 
     def do(self):
         self.Franzer.frameX = (self.Franzer.frameX + 1) % 6
-        self.Franzer.x += self.Franzer.dir * 10
+        self.Franzer.x += self.Franzer.dir * RUN_SPEED_PPS * game_framework.frame_time
 
         img = self.Franzer.images['Franzer_Run'][int(self.Franzer.frameX)]
         if self.Franzer.x < img.w / 2:
