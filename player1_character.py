@@ -50,8 +50,10 @@ class Al_Run:
         # 애니메이션 길이와 프레임 타임을 소유자에서 가져와 계산
         length = self.Al.frames_per_animation.get('Al_Run', 1)
 
-        fps = self.Al.animation_fps.get('Al_Run', 30.0)
-        increment = fps * game_framework.frame_time
+        self.Al.TIME_PER_ACTION = 1.0
+        self.Al.ACTION_PER_TIME = 1.0 / self.Al.TIME_PER_ACTION
+
+        increment = length * self.Al.ACTION_PER_TIME * game_framework.frame_time
         self.Al.frameX = (self.Al.frameX + increment) % length
 
         # 이동 처리
@@ -90,8 +92,10 @@ class Al_Idle:
         # 애니메이션 길이와 프레임 타임을 소유자에서 가져와 계산
         length = self.Al.frames_per_animation.get('Al_Idle', 1)
 
-        fps = self.Al.animation_fps.get('Al_Idle', 30.0)
-        increment = fps * game_framework.frame_time
+        self.Al.TIME_PER_ACTION = 2.0
+        self.Al.ACTION_PER_TIME = 1.0 / self.Al.TIME_PER_ACTION
+
+        increment = length * self.Al.ACTION_PER_TIME * game_framework.frame_time
         self.Al.frameX = (self.Al.frameX + increment) % length
 
     def draw(self):
@@ -117,12 +121,11 @@ class Al:
         # 각 애니메이션별로 최대 프레임 너비/높이를 저장하면 출력 크기를 통일하여 흔들림을 방지할 수 있음
         self.render_size = {}
 
+        self.TIME_PER_ACTION = 2.0
+        self.ACTION_PER_TIME = 1.0 / self.TIME_PER_ACTION
         # per-animation frame count 저장
         self.frames_per_animation = {}
-        self.animation_fps = {
-            'Al_Idle': 30.0,
-            'Al_Run': 30.0
-        }
+
         for name in self.animation_names:
             if name == 'Al_Idle':
                 frames = [load_image("./AL/" + name + " (%d)" % i + ".png") for i in range(1, 24)]
