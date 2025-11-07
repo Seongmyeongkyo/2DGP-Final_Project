@@ -25,6 +25,11 @@ def l_down(e):
 def l_up(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_l
 
+PIXEL_PER_METER = (10.0 / 0.3)  # 10 pixel 30 cm
+RUN_SPEED_KMPH = 20.0  # Km / Hour
+RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
+RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
+RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
 
 # 첫 번째 캐릭터 구현
 class Al_Run:
@@ -45,7 +50,7 @@ class Al_Run:
 
     def do(self):
         self.Al.frameX = (self.Al.frameX + 1) % 8
-        self.Al.x += self.Al.dir * 10
+        self.Al.x += self.Al.dir * RUN_SPEED_PPS * game_framework.frame_time
 
         # 화면과 충돌시 캐릭터가 화면 밖으로 벗어나지 않도록 처리
         img = self.Al.images['Al_Run'][int(self.Al.frameX)]
@@ -150,7 +155,7 @@ class Jondahl_Run:
 
     def do(self):
         self.Jondahl.frameX = (self.Jondahl.frameX + 1) % 17
-        self.Jondahl.x += self.Jondahl.dir * 10
+        self.Jondahl.x += self.Jondahl.dir * RUN_SPEED_PPS * game_framework.frame_time
 
         img = self.Jondahl.images['Jondahl_Run'][int(self.Jondahl.frameX)]
         if self.Jondahl.x < img.w / 2:
@@ -254,7 +259,7 @@ class Zizou_Olympia_Run:
         self.Zizou_Olympia.frameX = (self.Zizou_Olympia.frameX + 1) % 6
 
         # 이동 처리
-        self.Zizou_Olympia.x += self.Zizou_Olympia.dir * 10
+        self.Zizou_Olympia.x += self.Zizou_Olympia.dir * RUN_SPEED_PPS * game_framework.frame_time
 
         img = self.Zizou_Olympia.images['Zizou Olympia_Run'][int(self.Zizou_Olympia.frameX)]
         if self.Zizou_Olympia.x < img.w / 2:
@@ -361,7 +366,7 @@ class Franzer_Run:
 
     def do(self):
         self.Franzer.frameX = (self.Franzer.frameX + 1) % 6
-        self.Franzer.x += self.Franzer.dir * 10
+        self.Franzer.x += self.Franzer.dir * RUN_SPEED_PPS * game_framework.frame_time
 
         img = self.Franzer.images['Franzer_Run'][int(self.Franzer.frameX)]
         if self.Franzer.x < img.w / 2:
