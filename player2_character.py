@@ -44,6 +44,13 @@ class Al_Run:
         self.Al.frameX = (self.Al.frameX + 1) % 8
         self.Al.x += self.Al.dir * 10
 
+        # 화면과 충돌시 캐릭터가 화면 밖으로 벗어나지 않도록 처리
+        img = self.Al.images['Al_Run'][int(self.Al.frameX)]
+        if self.Al.x < img.w / 2:
+            self.Al.x = img.w / 2
+        elif self.Al.x > 1280 - img.w / 2:
+            self.Al.x = 1280 - img.w / 2
+
     def draw(self):
         img = self.Al.images['Al_Run'][int(self.Al.frameX)]
         draw_y = 0 + img.h / 2

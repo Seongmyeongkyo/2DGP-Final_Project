@@ -48,10 +48,10 @@ def reset_world():
 
     world = []
 
-    player1 = player1_character.Franzer()
+    player1 = player1_character.Al()
     world.append(player1)
 
-    player2 = player2_character.Franzer()
+    player2 = player2_character.Al()
     world.append(player2)
 
 
@@ -82,6 +82,7 @@ while running:
     handle_events()
     update_world()
     render_world()
-    delay(0.03)
+    delay(0.01)
+
 # finalization code
 close_canvas()
