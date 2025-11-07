@@ -360,6 +360,12 @@ class Franzer_Run:
         self.Franzer.frameX = (self.Franzer.frameX + 1) % 6
         self.Franzer.x += self.Franzer.dir * 10
 
+        img = self.Franzer.images['Franzer_Run'][int(self.Franzer.frameX)]
+        if self.Franzer.x < img.w / 2:
+            self.Franzer.x = img.w / 2
+        elif self.Franzer.x > 1280 - img.w / 2:
+            self.Franzer.x = 1280 - img.w / 2
+
     def draw(self):
         img = self.Franzer.images['Franzer_Run'][int(self.Franzer.frameX)]
         draw_y = 0 + img.h / 2
