@@ -1,5 +1,7 @@
 from pico2d import *
 from state_machine import StateMachine
+import game_world
+import game_framework
 
 # 이벤트를 체크하는 함수들을 구현
 # e = state_event

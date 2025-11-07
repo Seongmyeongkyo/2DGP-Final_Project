@@ -2,6 +2,9 @@ from pico2d import load_image, SDL_KEYDOWN, SDL_KEYUP, SDLK_j, SDLK_l, SDLK_k, S
 
 from state_machine import StateMachine
 
+import game_world
+import game_framework
+
 # 이벤트를 체크하는 함수들을 구현
 # e = state_event
 
