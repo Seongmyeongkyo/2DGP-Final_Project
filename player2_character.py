@@ -177,7 +177,7 @@ class Jondahl_Idle:
 
 class Jondahl:
     def __init__(self):
-        self.x, self.y = 97, 50
+        self.x, self.y = 1280 - 97, 50
         self.frameX = 0
         self.frameY = 0
         self.face_dir = -1
