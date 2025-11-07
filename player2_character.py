@@ -49,7 +49,14 @@ class Al_Run:
         pass
 
     def do(self):
-        self.Al.frameX = (self.Al.frameX + 1) % 8
+        # 애니메이션 길이와 프레임 타임을 소유자에서 가져와 계산
+        length = self.Al.frames_per_animation.get('Al_Run', 1)
+
+        fps = self.Al.animation_fps.get('Al_Run', 30.0)
+        increment = fps * game_framework.frame_time
+        self.Al.frameX = (self.Al.frameX + increment) % length
+
+        # 이동 처리
         self.Al.x += self.Al.dir * RUN_SPEED_PPS * game_framework.frame_time
 
         # 화면과 충돌시 캐릭터가 화면 밖으로 벗어나지 않도록 처리
@@ -81,7 +88,14 @@ class Al_Idle:
         pass
 
     def do(self):
-        self.Al.frameX = (self.Al.frameX + 1) % 25
+
+        # 애니메이션 길이와 프레임 타임을 소유자에서 가져와 계산
+        length = self.Al.frames_per_animation.get('Al_Idle', 1)
+
+        fps = self.Al.animation_fps.get('Al_Idle', 30.0)
+        increment = fps * game_framework.frame_time
+        self.Al.frameX = (self.Al.frameX + increment) % length
+
     def draw(self):
         # 원본 크기로 중앙 정렬하여 그려 좌우 흔들림을 제거 (스케일링 없음)
         img = self.Al.images['Al_Idle'][int(self.Al.frameX)]
@@ -104,15 +118,25 @@ class Al:
         self.images = {}
         # 각 애니메이션별로 최대 프레임 너비/높이를 저장하면 출력 크기를 통일하여 흔들림을 방지할 수 있음
         self.render_size = {}
+
+        # per-animation frame count 저장
+        self.frames_per_animation = {}
+        self.animation_fps = {
+            'Al_Idle': 30.0,
+            'Al_Run': 30.0
+        }
         for name in self.animation_names:
             if name == 'Al_Idle':
-                frames = [load_image("./AL/" + name + " (%d)" % i + ".png") for i in range(1, 26)]
+                frames = [load_image("./AL/" + name + " (%d)" % i + ".png") for i in range(1, 24)]
+
             elif name == 'Al_Run':
                 frames = [load_image("./AL/" + name + " (%d)" % i + ".png") for i in range(1, 9)]
+
             self.images[name] = frames
             max_w = max(img.w for img in frames)
             max_h = max(img.h for img in frames)
             self.render_size[name] = (max_w, max_h)
+            self.frames_per_animation[name] = len(frames)
 
         self.IDLE = Al_Idle(self)
         self.RUN = Al_Run(self)
