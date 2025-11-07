@@ -52,7 +52,7 @@ def reset_world():
     player1 = player1_character.Franzer()
     world.append(player1)
 
-    player2 = player2_character.Zizou_Olympia()
+    player2 = player2_character.Franzer()
     world.append(player2)
 
 
