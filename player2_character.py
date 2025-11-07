@@ -279,7 +279,7 @@ class Zizou_Olympia_Idle:
 
 class Zizou_Olympia:
     def __init__(self):
-        self.x, self.y = 97, 55
+        self.x, self.y = 1280 - 97, 55
         self.frameX = 0
         self.frameY = 0
         self.face_dir = -1
