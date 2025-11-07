@@ -28,8 +28,7 @@ def handle_events():
                 if 'player1' in globals() and hasattr(player1, 'handle_event'):
                     player1.handle_event(event)
                 continue
-            # player2: 화살표
-            if key in (SDLK_UP, SDLK_DOWN, SDLK_LEFT, SDLK_RIGHT):
+            if key in (SDLK_i, SDLK_k, SDLK_j, SDLK_l):
                 if 'player2' in globals() and hasattr(player2, 'handle_event'):
                     player2.handle_event(event)
                 continue
