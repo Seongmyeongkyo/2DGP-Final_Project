@@ -252,6 +252,12 @@ class Zizou_Olympia_Run:
         # 이동 처리
         self.Zizou_Olympia.x += self.Zizou_Olympia.dir * 10
 
+        img = self.Zizou_Olympia.images['Zizou Olympia_Run'][int(self.Zizou_Olympia.frameX)]
+        if self.Zizou_Olympia.x < img.w / 2:
+            self.Zizou_Olympia.x = img.w / 2
+        elif self.Zizou_Olympia.x > 1280 - img.w / 2:
+            self.Zizou_Olympia.x = 1280 - img.w / 2
+
     def draw(self):
         # 화면 출력 시 바라보는 방향(face_dir)을 사용해서 멈춰있을 때도 올바른 뒤집기 유지
         img = self.Zizou_Olympia.images['Zizou Olympia_Run'][int(self.Zizou_Olympia.frameX)]
