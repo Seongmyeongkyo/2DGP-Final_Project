@@ -23,6 +23,13 @@ def d_down(e):
 def d_up(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_d
 
+PIXEL_PER_METER = (10.0 / 0.3)  # 10 pixel 30 cm
+RUN_SPEED_KMPH = 20.0  # Km / Hour
+RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
+RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
+RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
+
+
 # 첫 번째 캐릭터 구현
 class Al_Run:
 
@@ -42,7 +49,7 @@ class Al_Run:
 
     def do(self):
         self.Al.frameX = (self.Al.frameX + 1) % 8
-        self.Al.x += self.Al.dir * 10
+        self.Al.x += self.Al.dir * RUN_SPEED_PPS * game_framework.frame_time
 
         # 화면과 충돌시 캐릭터가 화면 밖으로 벗어나지 않도록 처리
         img = self.Al.images['Al_Run'][int(self.Al.frameX)]
