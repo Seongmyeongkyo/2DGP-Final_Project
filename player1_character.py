@@ -3,6 +3,8 @@ from state_machine import StateMachine
 import game_world
 import game_framework
 
+from olympia_attack import Olympia_attack
+
 # 이벤트를 체크하는 함수들을 구현
 # e = state_event
 
@@ -375,13 +377,56 @@ class Jondahl:
     def draw(self):
         self.state_machine.draw()
 
-
-
-
-
-
-
 # 세 번째 캐릭터 구현
+
+class Zizou_Olympia_Attack:
+
+    def __init__(self, zizou_Olympia):
+        self.Zizou_Olympia = zizou_Olympia
+        # 공격 지속시간(초)
+        self.duration = 0.2
+        self.elapsed = 0.0
+
+    def enter(self, e):
+        # 방향 결정
+        if d_down(e):
+            self.Zizou_Olympia.dir = self.Zizou_Olympia.face_dir = 1
+        elif a_down(e):
+            self.Zizou_Olympia.dir = self.Zizou_Olympia.face_dir = -1
+        # 타이머 및 프레임 초기화
+        self.elapsed = 0.0
+        try:
+            self.Zizou_Olympia.frameX = 0
+        except Exception:
+            pass
+
+    def exit(self, e):
+        # 정리
+        try:
+            self.Zizou_Olympia.frameX = 0
+        except Exception:
+            pass
+        self.elapsed = 0.0
+
+    def do(self):
+        # 프레임 기반 애니메이션이 없고 이미지가 하나인 경우, 시간 누적으로 전환 처리
+        self.elapsed += game_framework.frame_time
+        if self.elapsed >= self.duration:
+            self.Zizou_Olympia.state_machine.handle_state_event(('TIMEOUT', None))
+
+    def draw(self):
+        # 단일 이미지(프레임 수 1) 안전하게 그리기
+        imgs = self.Zizou_Olympia.images.get('Zizou Olympia_Attack')
+        if not imgs:
+            return
+        img = imgs[0]
+        draw_y = 0 + img.h / 2
+        draw_x = self.Zizou_Olympia.x
+        if self.Zizou_Olympia.face_dir > 0:
+            img.composite_draw(0, 'h', draw_x, draw_y)
+        else:
+            img.draw(draw_x, draw_y)
+
 class Zizou_Olympia_Run:
 
     def __init__(self, zizou_Olympia):
@@ -460,7 +505,6 @@ class Zizou_Olympia_Idle:
             img.draw(draw_x, draw_y)
 
 
-
 class Zizou_Olympia:
     def __init__(self):
         self.x, self.y = 97, 55
@@ -468,7 +512,7 @@ class Zizou_Olympia:
         self.frameY = 0
         self.face_dir = 1
         self.dir = -1
-        self.animation_names = ['Zizou Olympia_Idle', 'Zizou Olympia_Run']
+        self.animation_names = ['Zizou Olympia_Idle', 'Zizou Olympia_Run', 'Zizou Olympia_Attack']
         self.images = {}
         self.render_size = {}
 
@@ -482,6 +526,8 @@ class Zizou_Olympia:
                 frames = [load_image("./Zizou_Olympia/" + name + " (%d)" % i + ".png") for i in range(1, 16)]
             elif name == 'Zizou Olympia_Run':
                 frames = [load_image("./Zizou_Olympia/" + name + " (%d)" % i + ".png") for i in range(1, 7)]
+            elif name == 'Zizou Olympia_Attack':
+                frames = [load_image("./Zizou_Olympia/" + name + " (%d)" % i + ".png") for i in range(1, 2)]
             self.images[name] = frames
             max_w = max(img.w for img in frames)
             max_h = max(img.h for img in frames)
@@ -490,11 +536,13 @@ class Zizou_Olympia:
 
         self.IDLE = Zizou_Olympia_Idle(self)
         self.RUN = Zizou_Olympia_Run(self)
+        self.ATTACK = Zizou_Olympia_Attack(self)
         self.state_machine = StateMachine(
             self.IDLE,
             {
-                self.IDLE: {w_down: self.IDLE, s_down: self.IDLE, a_down : self.RUN, d_down :self.RUN},
-                self.RUN : {d_up : self.IDLE, a_up : self.IDLE, a_down : self.RUN, d_down : self.RUN},
+                self.IDLE: {w_down: self.IDLE, s_down: self.IDLE, a_down : self.RUN, d_down :self.RUN, q_down : self.ATTACK},
+                self.RUN : {d_up : self.IDLE, a_up : self.IDLE, a_down : self.RUN, d_down : self.RUN, q_down : self.ATTACK},
+                self.ATTACK: {time_out: self.IDLE, a_down: self.RUN, d_down: self.RUN, q_down: self.ATTACK},
             }
         )
 
@@ -637,4 +685,3 @@ class Franzer:
 
     def draw(self):
         self.state_machine.draw()
-
