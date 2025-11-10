@@ -706,7 +706,7 @@ class Zizou_Olympia:
 
 
 # 네 번째 캐릭터 구현
-class Franzer_Normal_Skill:
+class Franzer_NomalSkill:
     def __init__(self, franzer):
         self.Franzer = franzer
 
@@ -892,7 +892,7 @@ class Franzer:
         self.IDLE = Franzer_Idle(self)
         self.RUN = Franzer_Run(self)
         self.ATTACK = Franzer_Attack(self)
-        self.NOMALSKILL = Franzer_Normal_Skill(self)
+        self.NOMALSKILL = Franzer_NomalSkill(self)
         self.state_machine = StateMachine(
             self.IDLE,
             {
