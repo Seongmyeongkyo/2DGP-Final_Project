@@ -119,7 +119,6 @@ class Al_Attack:
         else:
             img.draw(draw_x, draw_y)
 
-
 class Al_Run:
 
     def __init__(self, al):
@@ -198,7 +197,6 @@ class Al_Idle:
         else:
             img.draw(draw_x, draw_y)
 
-
 class Al:
     def __init__(self):
         self.x, self.y = 97, 50
@@ -269,6 +267,43 @@ class Al:
             game_world.add_object(al_nomal_skill_attack, 1)
 
 # 두 번째 캐릭터 구현
+class Jondahl_NomalSkill:
+    def __init__(self, jondahl):
+        self.Jondahl = jondahl
+
+    def enter(self, e):
+        # keyup이 아닌 keydown으로 방향을 결정해야 함
+        if d_down(e):
+            self.Jondahl.dir = self.Jondahl.face_dir = 1
+        elif a_down(e):
+            self.Jondahl.dir = self.Jondahl.face_dir = -1
+
+    def exit(self, e):
+        self.Jondahl.frameX = 0
+        pass
+
+    def do(self):
+        # 애니메이션 길이와 프레임 타임을 소유자에서 가져와 계산
+        length = self.Jondahl.frames_per_animation.get('Jondahl_NomalSkill', 1)
+
+        self.Jondahl.TIME_PER_ACTION = 1.0
+        self.Jondahl.ACTION_PER_TIME = 1.0 / self.Jondahl.TIME_PER_ACTION
+
+        increment = length * self.Jondahl.ACTION_PER_TIME * game_framework.frame_time
+        self.Jondahl.frameX = (self.Jondahl.frameX + increment) % length
+
+        if self.Jondahl.frameX >= length - 1:
+            self.Jondahl.state_machine.handle_state_event(('TIMEOUT', None))
+
+    def draw(self):
+        # 원본 크기로 중앙 정렬하여 그려 좌우 흔들림을 제거 (스케일링 없음)
+        img = self.Jondahl.images['Jondahl_NomalSkill'][int(self.Jondahl.frameX)]
+        draw_y = 0 + img.h / 2
+        draw_x = self.Jondahl.x
+        if self.Jondahl.face_dir > 0:
+            img.composite_draw(0, 'h', draw_x, draw_y)
+        else:
+            img.draw(draw_x, draw_y)
 
 class Jondahl_Attack:
     def __init__(self, jondahl):
@@ -307,7 +342,6 @@ class Jondahl_Attack:
             img.composite_draw(0, 'h', draw_x, draw_y)
         else:
             img.draw(draw_x, draw_y)
-
 
 class Jondahl_Run:
     def __init__(self, jondahl):
@@ -390,7 +424,7 @@ class Jondahl:
         self.frameY = 0
         self.face_dir = 1
         self.dir = -1
-        self.animation_names = ['Jondahl_Idle', 'Jondahl_Run', 'Jondahl_Attack']
+        self.animation_names = ['Jondahl_Idle', 'Jondahl_Run', 'Jondahl_Attack', 'Jondahl_NomalSkill']
         self.images = {}
         self.render_size = {}
 
@@ -406,6 +440,8 @@ class Jondahl:
                 frames = [load_image("./Jondahl/" + name + " (%d)" % i + ".png") for i in range(1, 18)]
             elif name == 'Jondahl_Attack':
                 frames = [load_image("./Jondahl/" + name + " (%d)" % i + ".png") for i in range(1, 5)]
+            elif name == 'Jondahl_NomalSkill':
+                frames = [load_image("./Jondahl/" + name + " (%d)" % i + ".png") for i in range(1, 13)]
             self.images[name] = frames
             max_w = max(img.w for img in frames)
             max_h = max(img.h for img in frames)
@@ -415,12 +451,14 @@ class Jondahl:
         self.IDLE = Jondahl_Idle(self)
         self.RUN = Jondahl_Run(self)
         self.ATTACK = Jondahl_Attack(self)
+        self.NOMALSKILL = Jondahl_NomalSkill(self)
         self.state_machine = StateMachine(
             self.IDLE,
             {
-                self.IDLE: {w_down: self.IDLE, s_down: self.IDLE, a_down : self.RUN, d_down :self.RUN, q_down : self.ATTACK},
-                self.RUN : {d_up : self.IDLE, a_up : self.IDLE, a_down : self.RUN, d_down : self.RUN, q_down : self.ATTACK},
+                self.IDLE: {w_down: self.IDLE, s_down: self.IDLE, a_down : self.RUN, d_down :self.RUN, q_down : self.ATTACK, e_down : self.NOMALSKILL},
+                self.RUN : {d_up : self.IDLE, a_up : self.IDLE, a_down : self.RUN, d_down : self.RUN, q_down : self.ATTACK, e_down : self.NOMALSKILL},
                 self.ATTACK : {time_out : self.IDLE, a_down : self.RUN, d_down : self.RUN, q_down : self.ATTACK},
+                self.NOMALSKILL : {time_out : self.IDLE},
             }
         )
 
@@ -563,7 +601,6 @@ class Zizou_Olympia_Idle:
             img.composite_draw(0, 'h', draw_x, draw_y)
         else:
             img.draw(draw_x, draw_y)
-
 
 class Zizou_Olympia:
     def __init__(self):
@@ -745,7 +782,6 @@ class Franzer_Run:
         else:
             img.draw(draw_x, draw_y)
 
-
 class Franzer_Idle:
 
     def __init__(self, franzer):
@@ -778,7 +814,6 @@ class Franzer_Idle:
             img.composite_draw(0, 'h', draw_x, draw_y)
         else:
             img.draw(draw_x, draw_y)
-
 
 class Franzer:
     def __init__(self):
