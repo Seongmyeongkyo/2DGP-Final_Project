@@ -474,6 +474,44 @@ class Jondahl:
         self.state_machine.draw()
 
 # 세 번째 캐릭터 구현
+class Zizou_Olympia_NomalSkill:
+    def __init__(self, zizou_Olympia):
+        self.Zizou_Olympia = zizou_Olympia
+
+    def enter(self, e):
+        # keyup이 아닌 keydown으로 방향을 결정해야 함
+        if d_down(e):
+            self.Zizou_Olympia.dir = self.Zizou_Olympia.face_dir = 1
+        elif a_down(e):
+            self.Zizou_Olympia.dir = self.Zizou_Olympia.face_dir = -1
+
+    def exit(self, e):
+        self.Zizou_Olympia.frameX = 0
+        pass
+
+    def do(self):
+        # 애니메이션 길이와 프레임 타임을 소유자에서 가져와 계산
+        length = self.Zizou_Olympia.frames_per_animation.get('Zizou Olympia_NomalSkill', 1)
+
+        self.Zizou_Olympia.TIME_PER_ACTION = 1.0
+        self.Zizou_Olympia.ACTION_PER_TIME = 1.0 / self.Zizou_Olympia.TIME_PER_ACTION
+
+        increment = length * self.Zizou_Olympia.ACTION_PER_TIME * game_framework.frame_time
+        self.Zizou_Olympia.frameX = (self.Zizou_Olympia.frameX + increment) % length
+
+        if self.Zizou_Olympia.frameX >= length - 1:
+            self.Zizou_Olympia.state_machine.handle_state_event(('TIMEOUT', None))
+
+
+    def draw(self):
+        # 화면 출력 시 바라보는 방향(face_dir)을 사용해서 멈춰있을 때도 올바른 뒤집기 유지
+        img = self.Zizou_Olympia.images['Zizou Olympia_NomalSkill'][int(self.Zizou_Olympia.frameX)]
+        draw_y = 0 + img.h / 2
+        draw_x = self.Zizou_Olympia.x
+        if self.Zizou_Olympia.face_dir > 0:
+            img.composite_draw(0, 'h', draw_x, draw_y)
+        else:
+            img.draw(draw_x, draw_y)
 
 class Zizou_Olympia_Attack:
 
@@ -609,7 +647,7 @@ class Zizou_Olympia:
         self.frameY = 0
         self.face_dir = 1
         self.dir = -1
-        self.animation_names = ['Zizou Olympia_Idle', 'Zizou Olympia_Run', 'Zizou Olympia_Attack']
+        self.animation_names = ['Zizou Olympia_Idle', 'Zizou Olympia_Run', 'Zizou Olympia_Attack', 'Zizou Olympia_NomalSkill']
         self.images = {}
         self.render_size = {}
 
@@ -625,6 +663,8 @@ class Zizou_Olympia:
                 frames = [load_image("./Zizou_Olympia/" + name + " (%d)" % i + ".png") for i in range(1, 7)]
             elif name == 'Zizou Olympia_Attack':
                 frames = [load_image("./Zizou_Olympia/" + name + " (%d)" % i + ".png") for i in range(1, 2)]
+            elif name == 'Zizou Olympia_NomalSkill':
+                frames = [load_image("./Zizou_Olympia/" + name + " (%d)" % i + ".png") for i in range(1, 4)]
             self.images[name] = frames
             max_w = max(img.w for img in frames)
             max_h = max(img.h for img in frames)
@@ -634,12 +674,14 @@ class Zizou_Olympia:
         self.IDLE = Zizou_Olympia_Idle(self)
         self.RUN = Zizou_Olympia_Run(self)
         self.ATTACK = Zizou_Olympia_Attack(self)
+        self.NOMALSKILL = Zizou_Olympia_NomalSkill(self)
         self.state_machine = StateMachine(
             self.IDLE,
             {
-                self.IDLE: {w_down: self.IDLE, s_down: self.IDLE, a_down : self.RUN, d_down :self.RUN, q_down : self.ATTACK},
-                self.RUN : {d_up : self.IDLE, a_up : self.IDLE, a_down : self.RUN, d_down : self.RUN, q_down : self.ATTACK},
-                self.ATTACK: {time_out: self.IDLE, a_down: self.RUN, d_down: self.RUN, q_down: self.ATTACK},
+                self.IDLE: {w_down: self.IDLE, s_down: self.IDLE, a_down : self.RUN, d_down :self.RUN, q_down : self.ATTACK, e_down : self.NOMALSKILL},
+                self.RUN : {d_up : self.IDLE, a_up : self.IDLE, a_down : self.RUN, d_down : self.RUN, q_down : self.ATTACK, e_down : self.NOMALSKILL},
+                self.ATTACK: {time_out: self.IDLE, a_down: self.RUN, d_down: self.RUN, q_down: self.ATTACK, e_down: self.NOMALSKILL},
+                self.NOMALSKILL: {time_out : self.IDLE},
             }
         )
 
