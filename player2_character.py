@@ -6,6 +6,7 @@ import game_world
 import game_framework
 
 from olympia_attack import Olympia_attack2
+from al_nomal_skill_attack import Al_Nomal_Skill_Attack2
 
 # 이벤트를 체크하는 함수들을 구현
 # e = state_event
@@ -48,6 +49,8 @@ class Al_NomalSkill:
             self.Al.dir = self.Al.face_dir = 1
         elif j_down(e):
             self.Al.dir = self.Al.face_dir = -1
+        if o_down(e):
+            self.Al.nomalSkill_attack()
 
     def exit(self, e):
         self.Al.frameX = 0
@@ -251,6 +254,14 @@ class Al:
 
     def draw(self):
         self.state_machine.draw()
+
+    def nomalSkill_attack(self):
+        if self.face_dir > 0:
+            al_nomal_skill_attack = Al_Nomal_Skill_Attack2(self.x + 82, self.y, self.face_dir)
+            game_world.add_object(al_nomal_skill_attack, 1)
+        else:
+            al_nomal_skill_attack = Al_Nomal_Skill_Attack2(self.x - 82, self.y, self.face_dir)
+            game_world.add_object(al_nomal_skill_attack, 1)
 
 
 
