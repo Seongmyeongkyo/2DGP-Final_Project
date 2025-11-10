@@ -3,7 +3,7 @@ from state_machine import StateMachine
 import game_world
 import game_framework
 
-from olympia_attack import Olympia_attack
+from olympia_attack import Olympia_attack2
 
 # 이벤트를 체크하는 함수들을 구현
 # e = state_event
@@ -552,10 +552,10 @@ class Zizou_Olympia:
 
     def nomal_attack(self):
         if self.face_dir < 0:
-            olympia_attack = Olympia_attack(self.x + 60, self.y, self.face_dir)
+            olympia_attack = Olympia_attack2(self.x - 60, self.y, self.face_dir)
             game_world.add_object(olympia_attack, 1)
         else:
-            olympia_attack = Olympia_attack(self.x - 60, self.y, self.face_dir)
+            olympia_attack = Olympia_attack2(self.x + 60, self.y, self.face_dir)
             game_world.add_object(olympia_attack, 1)
 
 
