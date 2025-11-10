@@ -561,6 +561,44 @@ class Zizou_Olympia:
 
 
 # 네 번째 캐릭터 구현
+class Franzer_Attack:
+    def __init__(self, franzer):
+        self.Franzer = franzer
+
+    def enter(self, e):
+        # keyup이 아닌 keydown으로 방향을 결정해야 함
+        if l_down(e):
+            self.Franzer.dir = self.Franzer.face_dir = 1
+        elif j_down(e):
+            self.Franzer.dir = self.Franzer.face_dir = -1
+
+    def exit(self, e):
+        self.Franzer.frameX = 0
+        pass
+
+    def do(self):
+        # 애니메이션 길이와 프레임 타임을 소유자에서 가져와 계산
+        length = self.Franzer.frames_per_animation.get('Franzer_Attack', 1)
+
+        self.Franzer.TIME_PER_ACTION = 0.3
+        self.Franzer.ACTION_PER_TIME = 1.0 / self.Franzer.TIME_PER_ACTION
+
+        increment = length * self.Franzer.ACTION_PER_TIME * game_framework.frame_time
+        self.Franzer.frameX = (self.Franzer.frameX + increment) % length
+
+        if self.Franzer.frameX >= length - 1:
+            self.Franzer.state_machine.handle_state_event(('TIMEOUT', None))
+
+    def draw(self):
+        # 원본 크기로 중앙 정렬하여 그려 좌우 흔들림을 제거 (스케일링 없음)
+        img = self.Franzer.images['Franzer_Attack'][int(self.Franzer.frameX)]
+        draw_y = 0 + img.h / 2
+        draw_x = self.Franzer.x
+        if self.Franzer.face_dir > 0:
+            img.composite_draw(0, 'h', draw_x, draw_y)
+        else:
+            img.draw(draw_x, draw_y)
+
 class Franzer_Run:
 
     def __init__(self, franzer):
@@ -646,7 +684,7 @@ class Franzer:
         self.frameY = 0
         self.face_dir = -1
         self.dir = 1
-        self.animation_names = ['Franzer_Idle', 'Franzer_Run']
+        self.animation_names = ['Franzer_Idle', 'Franzer_Run', 'Franzer_Attack']
         self.images = {}
         # 각 애니메이션별로 최대 프레임 너비/높이를 저장하면 출력 크기를 통일하여 흔들림을 방지할 수 있음
         self.render_size = {}
@@ -659,6 +697,8 @@ class Franzer:
                 frames = [load_image("./Franzer/" + name + " (%d)" % i + ".png") for i in range(1, 4)]
             elif name == 'Franzer_Run':
                 frames = [load_image("./Franzer/" + name + " (%d)" % i + ".png") for i in range(1, 7)]
+            elif name == 'Franzer_Attack':
+                frames = [load_image("./Franzer/" + name + " (%d)" % i + ".png") for i in range(1, 5)]
             self.images[name] = frames
             max_w = max(img.w for img in frames)
             max_h = max(img.h for img in frames)
@@ -667,11 +707,13 @@ class Franzer:
 
         self.IDLE = Franzer_Idle(self)
         self.RUN = Franzer_Run(self)
+        self.ATTACK = Franzer_Attack(self)
         self.state_machine = StateMachine(
             self.IDLE,
             {
-                self.IDLE: {i_down: self.IDLE, k_down: self.IDLE, j_down : self.RUN, l_down :self.RUN},
-                self.RUN : {j_up : self.IDLE, l_up : self.IDLE, j_down : self.RUN, l_down : self.RUN},
+                self.IDLE: {i_down: self.IDLE, k_down: self.IDLE, j_down : self.RUN, l_down :self.RUN, u_down : self.ATTACK},
+                self.RUN : {j_up : self.IDLE, l_up : self.IDLE, j_down : self.RUN, l_down : self.RUN, u_down : self.ATTACK},
+                self.ATTACK : {time_out : self.IDLE, j_down : self.RUN, l_down : self.RUN, u_down : self.ATTACK},
             }
         )
 
