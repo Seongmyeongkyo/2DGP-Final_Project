@@ -1,4 +1,6 @@
 from pico2d import *
+
+from player1_character import Al_NomalSkill
 from state_machine import StateMachine
 import game_world
 import game_framework
@@ -36,6 +38,45 @@ RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
 RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
 
 # 첫 번째 캐릭터 구현
+class Al_NomalSkill:
+
+    def __init__(self, al):
+        self.Al = al
+
+    def enter(self, e):
+        if l_down(e):
+            self.Al.dir = self.Al.face_dir = 1
+        elif j_down(e):
+            self.Al.dir = self.Al.face_dir = -1
+
+    def exit(self, e):
+        self.Al.frameX = 0
+        pass
+
+    def do(self):
+
+        # 애니메이션 길이와 프레임 타임을 소유자에서 가져와 계산
+        length = self.Al.frames_per_animation.get('Al_NomalSkill', 1)
+
+        self.Al.TIME_PER_ACTION = 0.3
+        self.Al.ACTION_PER_TIME = 1.0 / self.Al.TIME_PER_ACTION
+
+        increment = length * self.Al.ACTION_PER_TIME * game_framework.frame_time
+        self.Al.frameX = (self.Al.frameX + increment) % length
+
+        if self.Al.frameX >= length - 1:
+            self.Al.state_machine.handle_state_event(('TIMEOUT', None))
+
+    def draw(self):
+        # 원본 크기로 중앙 정렬하여 그려 좌우 흔들림을 제거 (스케일링 없음)
+        img = self.Al.images['Al_NomalSkill'][int(self.Al.frameX)]
+        draw_y = 0 + img.h / 2
+        draw_x = self.Al.x
+        if self.Al.face_dir > 0:
+            img.composite_draw(0, 'h', draw_x, draw_y)
+        else:
+            img.draw(draw_x, draw_y)
+
 class Al_Attack:
 
     def __init__(self, al):
@@ -161,7 +202,7 @@ class Al:
         self.frameY = 0
         self.face_dir = -1
         self.dir = 1
-        self.animation_names = ['Al_Idle', 'Al_Run', 'Al_Attack']
+        self.animation_names = ['Al_Idle', 'Al_Run', 'Al_Attack', 'Al_NomalSkill']
         self.images = {}
         # 각 애니메이션별로 최대 프레임 너비/높이를 저장하면 출력 크기를 통일하여 흔들림을 방지할 수 있음
         self.render_size = {}
@@ -178,6 +219,8 @@ class Al:
                 frames = [load_image("./AL/" + name + " (%d)" % i + ".png") for i in range(1, 9)]
             elif name == 'Al_Attack':
                 frames = [load_image("./AL/" + name + " (%d)" % i + ".png") for i in range(1, 6)]
+            elif name == 'Al_NomalSkill':
+                frames = [load_image("./AL/" + name + " (%d)" % i + ".png") for i in range(1, 5)]
             self.images[name] = frames
             max_w = max(img.w for img in frames)
             max_h = max(img.h for img in frames)
@@ -187,12 +230,14 @@ class Al:
         self.IDLE = Al_Idle(self)
         self.RUN = Al_Run(self)
         self.ATTACK = Al_Attack(self)
+        self.NOMAL_SKILL = Al_NomalSkill(self)
         self.state_machine = StateMachine(
             self.IDLE,
             {
-                self.IDLE: {i_down: self.IDLE, k_down: self.IDLE, j_down : self.RUN, l_down :self.RUN, u_down : self.ATTACK},
-                self.RUN : {l_up : self.IDLE, j_up : self.IDLE, j_down : self.RUN, l_down : self.RUN, u_down : self.ATTACK},
-                self.ATTACK : {time_out : self.IDLE, j_down : self.RUN, l_down : self.RUN, u_down : self.ATTACK},
+                self.IDLE: {i_down: self.IDLE, k_down: self.IDLE, j_down : self.RUN, l_down :self.RUN, u_down : self.ATTACK, o_down : self.NOMAL_SKILL},
+                self.RUN : {l_up : self.IDLE, j_up : self.IDLE, j_down : self.RUN, l_down : self.RUN, u_down : self.ATTACK, o_down : self.NOMAL_SKILL},
+                self.ATTACK : {time_out : self.IDLE, j_down : self.RUN, l_down : self.RUN, u_down : self.ATTACK, o_down : self.NOMAL_SKILL},
+                self.NOMAL_SKILL : {time_out : self.IDLE},
             }
         )
 
