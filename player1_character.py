@@ -560,8 +560,12 @@ class Zizou_Olympia:
         self.state_machine.draw()
 
     def nomal_attack(self):
-        olympia_attack = Olympia_attack(self.x + self.face_dir * 50, self.y + 20)
-        game_world.add_object(olympia_attack, 1)
+        if self.face_dir > 0:
+            olympia_attack = Olympia_attack(self.x + 60, self.y, self.face_dir)
+            game_world.add_object(olympia_attack, 1)
+        else:
+            olympia_attack = Olympia_attack(self.x - 60, self.y, self.face_dir)
+            game_world.add_object(olympia_attack, 1)
 
 
 # 네 번째 캐릭터 구현
