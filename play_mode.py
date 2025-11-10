@@ -14,15 +14,15 @@ def handle_events():
 
     # 숫자키로 플레이어 교체 매핑 (없으면 무시)
     player1_key_map = {
-        SDLK_1: 'Zizou_Olympia',
-        SDLK_2: 'Al',
-        SDLK_3: 'Jondahl',
+        SDLK_1: 'Al',
+        SDLK_2: 'Jondahl',
+        SDLK_3: 'Zizou_Olympia',
         SDLK_4: 'Franzer',
     }
     player2_key_map = {
-        SDLK_6: 'Zizou_Olympia',
-        SDLK_7: 'Al',
-        SDLK_8: 'Jondahl',
+        SDLK_6: 'Al',
+        SDLK_7: 'Jondahl',
+        SDLK_8: 'Zizou_Olympia',
         SDLK_9: 'Franzer',
     }
 
@@ -91,10 +91,10 @@ def init():
 
     game_world.clear()
 
-    player1 = player1_character.Zizou_Olympia()
+    player1 = player1_character.Al()
     game_world.add_object(player1, 1)
 
-    player2 = player2_character.Jondahl()
+    player2 = player2_character.Al()
     game_world.add_object(player2, 1)
 
 
