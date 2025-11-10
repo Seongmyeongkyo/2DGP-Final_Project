@@ -242,7 +242,7 @@ class Al:
             {
                 self.IDLE: {w_down: self.IDLE, s_down: self.IDLE, a_down : self.RUN, d_down :self.RUN, q_down : self.ATTACK, e_down : self.NOMALSKILL},
                 self.RUN : {d_up : self.IDLE, a_up : self.IDLE, a_down : self.RUN, d_down : self.RUN, q_down : self.ATTACK, e_down : self.NOMALSKILL},
-                self.ATTACK : {time_out : self.IDLE, a_down : self.RUN, d_down : self.RUN, q_down : self.ATTACK},
+                self.ATTACK : {time_out : self.IDLE, a_down : self.RUN, d_down : self.RUN, q_down : self.ATTACK, e_down : self.NOMALSKILL},
                 self.NOMALSKILL : {time_out : self.IDLE},
             }
         )
@@ -457,7 +457,7 @@ class Jondahl:
             {
                 self.IDLE: {w_down: self.IDLE, s_down: self.IDLE, a_down : self.RUN, d_down :self.RUN, q_down : self.ATTACK, e_down : self.NOMALSKILL},
                 self.RUN : {d_up : self.IDLE, a_up : self.IDLE, a_down : self.RUN, d_down : self.RUN, q_down : self.ATTACK, e_down : self.NOMALSKILL},
-                self.ATTACK : {time_out : self.IDLE, a_down : self.RUN, d_down : self.RUN, q_down : self.ATTACK},
+                self.ATTACK : {time_out : self.IDLE, a_down : self.RUN, d_down : self.RUN, q_down : self.ATTACK, e_down : self.NOMALSKILL},
                 self.NOMALSKILL : {time_out : self.IDLE},
             }
         )
