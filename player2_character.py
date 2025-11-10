@@ -1,7 +1,5 @@
-from pico2d import load_image, SDL_KEYDOWN, SDL_KEYUP, SDLK_j, SDLK_l, SDLK_k, SDLK_i
-
+from pico2d import *
 from state_machine import StateMachine
-
 import game_world
 import game_framework
 
@@ -24,6 +22,8 @@ def l_down(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_l
 def l_up(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_l
+def u_down(e):
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_u
 
 PIXEL_PER_METER = (10.0 / 0.3)  # 10 pixel 30 cm
 RUN_SPEED_KMPH = 20.0  # Km / Hour
@@ -32,6 +32,45 @@ RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
 RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
 
 # 첫 번째 캐릭터 구현
+class Al_Attack:
+
+    def __init__(self, al):
+        self.Al = al
+
+    def enter(self, e):
+        if l_down(e):
+            self.Al.dir = self.Al.face_dir = 1
+        elif j_down(e):
+            self.Al.dir = self.Al.face_dir = -1
+
+    def exit(self, e):
+        self.Al.frameX = 0
+        pass
+
+    def do(self):
+
+        # 애니메이션 길이와 프레임 타임을 소유자에서 가져와 계산
+        length = self.Al.frames_per_animation.get('Al_Attack', 1)
+
+        self.Al.TIME_PER_ACTION = 0.3
+        self.Al.ACTION_PER_TIME = 1.0 / self.Al.TIME_PER_ACTION
+
+        increment = length * self.Al.ACTION_PER_TIME * game_framework.frame_time
+        self.Al.frameX = (self.Al.frameX + increment) % length
+
+        if self.Al.frameX >= length - 1:
+            self.Al.state_machine.handle_state_event(('TIMEOUT', None))
+
+    def draw(self):
+        # 원본 크기로 중앙 정렬하여 그려 좌우 흔들림을 제거 (스케일링 없음)
+        img = self.Al.images['Al_Attack'][int(self.Al.frameX)]
+        draw_y = 0 + img.h / 2
+        draw_x = self.Al.x
+        if self.Al.face_dir > 0:
+            img.composite_draw(0, 'h', draw_x, draw_y)
+        else:
+            img.draw(draw_x, draw_y)
+
 class Al_Run:
 
     def __init__(self, al):
@@ -118,7 +157,7 @@ class Al:
         self.frameY = 0
         self.face_dir = -1
         self.dir = 1
-        self.animation_names = ['Al_Idle', 'Al_Run']
+        self.animation_names = ['Al_Idle', 'Al_Run', 'Al_Attack']
         self.images = {}
         # 각 애니메이션별로 최대 프레임 너비/높이를 저장하면 출력 크기를 통일하여 흔들림을 방지할 수 있음
         self.render_size = {}
@@ -131,10 +170,10 @@ class Al:
         for name in self.animation_names:
             if name == 'Al_Idle':
                 frames = [load_image("./AL/" + name + " (%d)" % i + ".png") for i in range(1, 24)]
-
             elif name == 'Al_Run':
                 frames = [load_image("./AL/" + name + " (%d)" % i + ".png") for i in range(1, 9)]
-
+            elif name == 'Al_Attack':
+                frames = [load_image("./AL/" + name + " (%d)" % i + ".png") for i in range(1, 6)]
             self.images[name] = frames
             max_w = max(img.w for img in frames)
             max_h = max(img.h for img in frames)
@@ -143,11 +182,13 @@ class Al:
 
         self.IDLE = Al_Idle(self)
         self.RUN = Al_Run(self)
+        self.ATTACK = Al_Attack(self)
         self.state_machine = StateMachine(
             self.IDLE,
             {
-                self.IDLE: {i_down: self.IDLE, k_down: self.IDLE, j_down : self.RUN, l_down :self.RUN},
-                self.RUN : {l_up : self.IDLE, j_up : self.IDLE, j_down : self.RUN, l_down : self.RUN},
+                self.IDLE: {i_down: self.IDLE, k_down: self.IDLE, j_down : self.RUN, l_down :self.RUN, u_down : self.ATTACK},
+                self.RUN : {l_up : self.IDLE, j_up : self.IDLE, j_down : self.RUN, l_down : self.RUN, u_down : self.ATTACK},
+                self.ATTACK : {time_out : self.IDLE, j_down : self.RUN, l_down : self.RUN},
             }
         )
 
