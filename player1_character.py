@@ -5,6 +5,8 @@ import game_framework
 
 from olympia_attack import Olympia_attack
 
+from al_nomal_skill_attack import Al_Nomal_Skill_Attack
+
 # 이벤트를 체크하는 함수들을 구현
 # e = state_event
 
@@ -47,6 +49,8 @@ class Al_NomalSkill:
             self.Al.dir = self.Al.face_dir = 1
         elif a_down(e):
             self.Al.dir = self.Al.face_dir = -1
+        if e_down(e):
+            self.Al.nomalSkill_attack()
 
     def exit(self, e):
         self.Al.frameX = 0
@@ -107,7 +111,7 @@ class Al_Attack:
 
     def draw(self):
         # 원본 크기로 중앙 정렬하여 그려 좌우 흔들림을 제거 (스케일링 없음)
-        img = self.Al.images['Al_NomalSkill'][int(self.Al.frameX)]
+        img = self.Al.images['Al_Attack'][int(self.Al.frameX)]
         draw_y = 0 + img.h / 2
         draw_x = self.Al.x
         if self.Al.face_dir > 0:
@@ -234,7 +238,7 @@ class Al:
         self.IDLE = Al_Idle(self)
         self.RUN = Al_Run(self)
         self.ATTACK = Al_Attack(self)
-        self.NOMALSKILL = Al_Attack(self)
+        self.NOMALSKILL = Al_NomalSkill(self)
         self.state_machine = StateMachine(
             self.IDLE,
             {
@@ -255,6 +259,14 @@ class Al:
 
     def draw(self):
         self.state_machine.draw()
+
+    def nomalSkill_attack(self):
+        if self.face_dir > 0:
+            al_nomal_skill_attack = Al_Nomal_Skill_Attack(self.x + 82, self.y, self.face_dir)
+            game_world.add_object(al_nomal_skill_attack, 1)
+        else:
+            al_nomal_skill_attack = Al_Nomal_Skill_Attack(self.x - 82, self.y, self.face_dir)
+            game_world.add_object(al_nomal_skill_attack, 1)
 
 # 두 번째 캐릭터 구현
 
