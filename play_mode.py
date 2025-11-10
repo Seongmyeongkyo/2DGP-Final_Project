@@ -8,8 +8,24 @@ import player2_character
 
 
 def handle_events():
+    global player1, player2
 
     event_list = get_events()
+
+    # 숫자키로 플레이어 교체 매핑 (없으면 무시)
+    player1_key_map = {
+        SDLK_1: 'Zizou_Olympia',
+        SDLK_2: 'Al',
+        SDLK_3: 'Jondahl',
+        SDLK_4: 'Franzer',
+    }
+    player2_key_map = {
+        SDLK_6: 'Zizou_Olympia',
+        SDLK_7: 'Al',
+        SDLK_8: 'Jondahl',
+        SDLK_9: 'Franzer',
+    }
+
     for event in event_list:
         if event.type == SDL_QUIT:
             game_framework.quit()
@@ -18,6 +34,38 @@ def handle_events():
         if event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
             game_framework.quit()
             continue
+
+        # 숫자키로 캐릭터 교체 처리 (keydown)
+        if event.type == SDL_KEYDOWN:
+            key = getattr(event, 'key', None)
+
+            if key in player1_key_map:
+                cls_name = player1_key_map[key]
+                cls = getattr(player1_character, cls_name, None)
+                if cls:
+                    # 기존 player1 제거 후 새 객체 추가
+                    try:
+                        if 'player1' in globals():
+                            game_world.remove_object(player1)
+                    except Exception:
+                        pass
+                    player1 = cls()
+                    game_world.add_object(player1, 1)
+                continue
+
+            if key in player2_key_map:
+                cls_name = player2_key_map[key]
+                cls = getattr(player2_character, cls_name, None)
+                if cls:
+                    try:
+                        if 'player2' in globals():
+                            game_world.remove_object(player2)
+                    except Exception:
+                        pass
+                    player2 = cls()
+                    game_world.add_object(player2, 1)
+                continue
+
         # 키 입력은 키 종류에 따라 각 플레이어로 라우팅
         if event.type in (SDL_KEYDOWN, SDL_KEYUP):
             key = getattr(event, 'key', None)
@@ -43,10 +91,10 @@ def init():
 
     game_world.clear()
 
-    player1 = player1_character.Jondahl()
+    player1 = player1_character.Zizou_Olympia()
     game_world.add_object(player1, 1)
 
-    player2 = player2_character.Franzer()
+    player2 = player2_character.Jondahl()
     game_world.add_object(player2, 1)
 
 
