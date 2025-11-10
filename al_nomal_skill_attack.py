@@ -20,10 +20,10 @@ class Al_Nomal_Skill_Attack:
         self.left_end_x = x - 300
 
     def draw(self):
-        if Al_Nomal_Skill_Attack.image and self.face_dir < 0:
-            Al_Nomal_Skill_Attack.image.composite_draw(0, 'h', self.x, self.y)
-        elif Al_Nomal_Skill_Attack.image and self.face_dir > 0:
-            Al_Nomal_Skill_Attack.image.draw(self.x, self.y)
+        if Al_Nomal_Skill_Attack.image and self.face_dir > 0:
+            Al_Nomal_Skill_Attack.image.composite_draw(0, 'h', self.x, self.y, 123, 78)
+        elif Al_Nomal_Skill_Attack.image and self.face_dir < 0:
+            Al_Nomal_Skill_Attack.image.draw(self.x, self.y, 123, 78)
 
     def update(self):
         # 위치 업데이트
@@ -33,5 +33,5 @@ class Al_Nomal_Skill_Attack:
             game_world.remove_object(self)
         elif self.face_dir > 0 and self.x > self.right_end_x:
             game_world.remove_object(self)
-        elif self.x < 0 or self.x > 1280:
+        if self.x < 0 or self.x > 1280:
             game_world.remove_object(self)
