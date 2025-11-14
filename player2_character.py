@@ -256,10 +256,10 @@ class Al:
 
     def nomalSkill_attack(self):
         if self.face_dir > 0:
-            al_nomal_skill_attack = Al_Nomal_Skill_Attack2(self.x + 82, self.y, self.face_dir)
+            al_nomal_skill_attack = Al_Nomal_Skill_Attack2(self.x + 160, self.y + self.y / 3, self.face_dir)
             game_world.add_object(al_nomal_skill_attack, 1)
         else:
-            al_nomal_skill_attack = Al_Nomal_Skill_Attack2(self.x - 82, self.y, self.face_dir)
+            al_nomal_skill_attack = Al_Nomal_Skill_Attack2(self.x - 160, self.y + self.y / 3, self.face_dir)
             game_world.add_object(al_nomal_skill_attack, 1)
 
 
