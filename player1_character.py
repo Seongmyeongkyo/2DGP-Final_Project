@@ -65,9 +65,9 @@ class Al_NomalSkill:
         self.Al.ACTION_PER_TIME = 1.0 / self.Al.TIME_PER_ACTION
 
         increment = length * self.Al.ACTION_PER_TIME * game_framework.frame_time
-        self.Al.frameX = (self.Al.frameX + increment) % length
+        self.Al.frameX = (self.Al.frameX + increment)
 
-        if self.Al.frameX >= length - 1:
+        if self.Al.frameX >= length:
             self.Al.state_machine.handle_state_event(('TIMEOUT', None))
 
     def draw(self):
@@ -104,9 +104,9 @@ class Al_Attack:
         self.Al.ACTION_PER_TIME = 1.0 / self.Al.TIME_PER_ACTION
 
         increment = length * self.Al.ACTION_PER_TIME * game_framework.frame_time
-        self.Al.frameX = (self.Al.frameX + increment) % length
+        self.Al.frameX = (self.Al.frameX + increment)
 
-        if self.Al.frameX >= length - 1:
+        if self.Al.frameX >= length:
             self.Al.state_machine.handle_state_event(('TIMEOUT', None))
 
     def draw(self):
@@ -290,7 +290,7 @@ class Jondahl_NomalSkill:
         self.Jondahl.ACTION_PER_TIME = 1.0 / self.Jondahl.TIME_PER_ACTION
 
         increment = length * self.Jondahl.ACTION_PER_TIME * game_framework.frame_time
-        self.Jondahl.frameX = (self.Jondahl.frameX + increment) % length
+        self.Jondahl.frameX = (self.Jondahl.frameX + increment)
 
         if self.Jondahl.frameX >= length - 1:
             self.Jondahl.state_machine.handle_state_event(('TIMEOUT', None))
@@ -328,9 +328,9 @@ class Jondahl_Attack:
         self.Jondahl.ACTION_PER_TIME = 1.0 / self.Jondahl.TIME_PER_ACTION
 
         increment = length * self.Jondahl.ACTION_PER_TIME * game_framework.frame_time
-        self.Jondahl.frameX = (self.Jondahl.frameX + increment) % length
+        self.Jondahl.frameX = (self.Jondahl.frameX + increment)
 
-        if self.Jondahl.frameX >= length - 1:
+        if self.Jondahl.frameX >= length:
             self.Jondahl.state_machine.handle_state_event(('TIMEOUT', None))
 
     def draw(self):
@@ -497,9 +497,9 @@ class Zizou_Olympia_NomalSkill:
         self.Zizou_Olympia.ACTION_PER_TIME = 1.0 / self.Zizou_Olympia.TIME_PER_ACTION
 
         increment = length * self.Zizou_Olympia.ACTION_PER_TIME * game_framework.frame_time
-        self.Zizou_Olympia.frameX = (self.Zizou_Olympia.frameX + increment) % length
+        self.Zizou_Olympia.frameX = (self.Zizou_Olympia.frameX + increment)
 
-        if self.Zizou_Olympia.frameX >= length - 1:
+        if self.Zizou_Olympia.frameX >= length:
             self.Zizou_Olympia.state_machine.handle_state_event(('TIMEOUT', None))
 
 
@@ -728,9 +728,9 @@ class Franzer_NomalSkill:
         self.Franzer.ACTION_PER_TIME = 1.0 / self.Franzer.TIME_PER_ACTION
 
         increment = length * self.Franzer.ACTION_PER_TIME * game_framework.frame_time
-        self.Franzer.frameX = (self.Franzer.frameX + increment) % length
+        self.Franzer.frameX = (self.Franzer.frameX + increment)
 
-        if self.Franzer.frameX >= length - 1:
+        if self.Franzer.frameX >= length:
             self.Franzer.state_machine.handle_state_event(('TIMEOUT', None))
 
     def draw(self):
@@ -766,9 +766,9 @@ class Franzer_Attack:
         self.Franzer.ACTION_PER_TIME = 1.0 / self.Franzer.TIME_PER_ACTION
 
         increment = length * self.Franzer.ACTION_PER_TIME * game_framework.frame_time
-        self.Franzer.frameX = (self.Franzer.frameX + increment) % length
+        self.Franzer.frameX = (self.Franzer.frameX + increment)
 
-        if self.Franzer.frameX >= length - 1:
+        if self.Franzer.frameX >= length:
             self.Franzer.state_machine.handle_state_event(('TIMEOUT', None))
 
     def draw(self):
