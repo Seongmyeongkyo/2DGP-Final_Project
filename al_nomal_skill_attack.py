@@ -109,7 +109,7 @@ class Al_Nomal_Skill_Attack2:
         # 애니메이션 길이와 프레임 타임을 소유자에서 가져와 계산
         length = self.frames_per_animation.get('Al_NomalSkill_Attack', 1)
 
-        self.TIME_PER_ACTION = 0.5
+        self.TIME_PER_ACTION = 0.3
         self.ACTION_PER_TIME = 1.0 / self.TIME_PER_ACTION
 
         increment = length * self.ACTION_PER_TIME * game_framework.frame_time
