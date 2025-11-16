@@ -7,6 +7,7 @@ import game_framework
 
 from olympia_attack import Olympia_attack2
 from al_nomal_skill_attack import Al_Nomal_Skill_Attack2
+from jondahl_nomal_skill_attack import Jondahl_Nomal_Skill_Attack2
 
 # 이벤트를 체크하는 함수들을 구현
 # e = state_event
@@ -275,8 +276,12 @@ class Jondahl_NomalSkill:
         elif j_down(e):
             self.Jondahl.dir = self.Jondahl.face_dir = -1
 
+        # 스킬 임펙트 생성 플래그
+        self.Jondahl.skill_triggered = False
+
     def exit(self, e):
         self.Jondahl.frameX = 0
+        self.Jondahl.skill_triggered = False
         pass
 
     def do(self):
@@ -289,7 +294,12 @@ class Jondahl_NomalSkill:
         increment = length * self.Jondahl.ACTION_PER_TIME * game_framework.frame_time
         self.Jondahl.frameX = (self.Jondahl.frameX + increment)
 
-        if self.Jondahl.frameX >= length:
+        # 스킬 임팩트 생성 시점에 한 번만 호출
+        if not self.Jondahl.skill_triggered and int(self.Jondahl.frameX) == 9:
+            self.Jondahl.nomalSkill_attack()
+            self.Jondahl.skill_triggered = True
+
+        if self.Jondahl.frameX >= length - 1:
             self.Jondahl.state_machine.handle_state_event(('TIMEOUT', None))
 
     def draw(self):
@@ -466,6 +476,14 @@ class Jondahl:
 
     def draw(self):
         self.state_machine.draw()
+
+    def nomalSkill_attack(self):
+        if self.face_dir > 0:
+            jondahl_nomal_skill_attack = Jondahl_Nomal_Skill_Attack2(self.x + 222, self.y + 40, self.face_dir)
+            game_world.add_object(jondahl_nomal_skill_attack, 1)
+        else:
+            jondahl_nomal_skill_attack = Jondahl_Nomal_Skill_Attack2(self.x - 222, self.y + 40, self.face_dir)
+            game_world.add_object(jondahl_nomal_skill_attack, 1)
 
 
 # 세 번째 캐릭터 구현
