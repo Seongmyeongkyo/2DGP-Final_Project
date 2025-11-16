@@ -68,7 +68,7 @@ class Zizou_Olympia_Nomal_Skill_Attack:
         if self.x < 0 or self.x > 1280:
             game_world.remove_object(self)
 
-class Al_Nomal_Skill_Attack2:
+class Zizou_Olympia_Nomal_Skill_Attack2:
     def __init__(self, x = 1280 - 97, y = 70, face_dir = -1):
         self.frameX = 0
         self.animation_names = ['Zizou_Olympia_NomalSkill_Attack']
