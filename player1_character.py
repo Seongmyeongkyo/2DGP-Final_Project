@@ -7,6 +7,7 @@ from olympia_attack import Olympia_attack
 
 from al_nomal_skill_attack import Al_Nomal_Skill_Attack
 from jondahl_nomal_skill_attack import Jondahl_Nomal_Skill_Attack
+from zizou_olympia_nomal_skill_attack import Zizou_Olympia_Nomal_Skill_Attack
 
 # 이벤트를 체크하는 함수들을 구현
 # e = state_event
@@ -502,9 +503,12 @@ class Zizou_Olympia_NomalSkill:
             self.Zizou_Olympia.dir = self.Zizou_Olympia.face_dir = 1
         elif a_down(e):
             self.Zizou_Olympia.dir = self.Zizou_Olympia.face_dir = -1
+        # 스킬 임펙트 생성 플래그
+        self.Zizou_Olympia.skill_triggered = False
 
     def exit(self, e):
         self.Zizou_Olympia.frameX = 0
+        self.Zizou_Olympia.skill_triggered = False
         pass
 
     def do(self):
@@ -516,6 +520,11 @@ class Zizou_Olympia_NomalSkill:
 
         increment = length * self.Zizou_Olympia.ACTION_PER_TIME * game_framework.frame_time
         self.Zizou_Olympia.frameX = (self.Zizou_Olympia.frameX + increment)
+
+        # 스킬 임팩트 생성 시점에 한 번만 호출
+        if not self.Zizou_Olympia.skill_triggered and int(self.Zizou_Olympia.frameX) == 2:
+            self.Zizou_Olympia.nomalSkill_attack()
+            self.Zizou_Olympia.skill_triggered = True
 
         if self.Zizou_Olympia.frameX >= length:
             self.Zizou_Olympia.state_machine.handle_state_event(('TIMEOUT', None))
@@ -721,6 +730,14 @@ class Zizou_Olympia:
         else:
             olympia_attack = Olympia_attack(self.x - 60, self.y, self.face_dir)
             game_world.add_object(olympia_attack, 1)
+
+    def nomalSkill_attack(self):
+        if self.face_dir > 0:
+            zizou_olympia_nomal_skill_attack = Zizou_Olympia_Nomal_Skill_Attack(self.x + 36, self.y, self.face_dir)
+            game_world.add_object(zizou_olympia_nomal_skill_attack, 1)
+        else:
+            zizou_olympia_nomal_skill_attack = Zizou_Olympia_Nomal_Skill_Attack(self.x - 36, self.y, self.face_dir)
+            game_world.add_object(zizou_olympia_nomal_skill_attack, 1)
 
 
 # 네 번째 캐릭터 구현
