@@ -5,6 +5,7 @@ import game_world
 
 import player1_character
 import player2_character
+import Play_background
 
 
 def handle_events():
@@ -87,9 +88,12 @@ def handle_events():
 
 
 def init():
-    global player1, player2
+    global player1, player2, background
 
     game_world.clear()
+
+    background = Play_background.background()
+    game_world.add_object(background, 0)
 
     player1 = player1_character.Al()
     game_world.add_object(player1, 1)
