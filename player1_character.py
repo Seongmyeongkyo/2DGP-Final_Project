@@ -75,7 +75,7 @@ class Al_NomalSkill:
     def draw(self):
         # 원본 크기로 중앙 정렬하여 그려 좌우 흔들림을 제거 (스케일링 없음)
         img = self.Al.images['Al_NomalSkill'][int(self.Al.frameX)]
-        draw_y = 0 + img.h / 2
+        draw_y = 100 + img.h / 2
         draw_x = self.Al.x
         if self.Al.face_dir > 0:
             img.composite_draw(0, 'h', draw_x, draw_y)
@@ -114,7 +114,7 @@ class Al_Attack:
     def draw(self):
         # 원본 크기로 중앙 정렬하여 그려 좌우 흔들림을 제거 (스케일링 없음)
         img = self.Al.images['Al_Attack'][int(self.Al.frameX)]
-        draw_y = 0 + img.h / 2
+        draw_y = 100 + img.h / 2
         draw_x = self.Al.x
         if self.Al.face_dir > 0:
             img.composite_draw(0, 'h', draw_x, draw_y)
@@ -159,7 +159,7 @@ class Al_Run:
 
     def draw(self):
         img = self.Al.images['Al_Run'][int(self.Al.frameX)]
-        draw_y = 0 + img.h / 2
+        draw_y = 100 + img.h / 2
         draw_x = self.Al.x
         if self.Al.face_dir > 0:
             img.composite_draw(0, 'h', draw_x, draw_y)
@@ -192,7 +192,7 @@ class Al_Idle:
     def draw(self):
         # 원본 크기로 중앙 정렬하여 그려 좌우 흔들림을 제거 (스케일링 없음)
         img = self.Al.images['Al_Idle'][int(self.Al.frameX)]
-        draw_y = 0 + img.h / 2
+        draw_y = 100 + img.h / 2
         draw_x = self.Al.x
         if self.Al.face_dir > 0:
             img.composite_draw(0, 'h', draw_x, draw_y)
@@ -201,7 +201,7 @@ class Al_Idle:
 
 class Al:
     def __init__(self):
-        self.x, self.y = 97, 50
+        self.x, self.y = 97, 125
         self.frameX = 0
         self.frameY = 0
         self.face_dir = 1
@@ -309,7 +309,7 @@ class Jondahl_NomalSkill:
     def draw(self):
         # 원본 크기로 중앙 정렬하여 그려 좌우 흔들림을 제거 (스케일링 없음)
         img = self.Jondahl.images['Jondahl_NomalSkill'][int(self.Jondahl.frameX)]
-        draw_y = 0 + img.h / 2
+        draw_y = 100 + img.h / 2
         draw_x = self.Jondahl.x
         if self.Jondahl.face_dir > 0:
             img.composite_draw(0, 'h', draw_x, draw_y)
@@ -347,7 +347,7 @@ class Jondahl_Attack:
     def draw(self):
         # 원본 크기로 중앙 정렬하여 그려 좌우 흔들림을 제거 (스케일링 없음)
         img = self.Jondahl.images['Jondahl_Attack'][int(self.Jondahl.frameX)]
-        draw_y = 0 + img.h / 2
+        draw_y = 100 + img.h / 2
         draw_x = self.Jondahl.x
         if self.Jondahl.face_dir > 0:
             img.composite_draw(0, 'h', draw_x, draw_y)
@@ -390,7 +390,7 @@ class Jondahl_Run:
     def draw(self):
         # 원본 크기로 중앙 정렬하여 그려 좌우 흔들림을 제거 (스케일링 없음)
         img = self.Jondahl.images['Jondahl_Run'][int(self.Jondahl.frameX)]
-        draw_y = 0 + img.h / 2
+        draw_y = 100 + img.h / 2
         draw_x = self.Jondahl.x
         if self.Jondahl.face_dir < 0:
             img.composite_draw(0, 'h', draw_x, draw_y)
@@ -421,7 +421,7 @@ class Jondahl_Idle:
     def draw(self):
         # 원본 크기로 중앙 정렬하여 그려 좌우 흔들림을 제거 (스케일링 없음)
         img = self.Jondahl.images['Jondahl_Idle'][int(self.Jondahl.frameX)]
-        draw_y = 0 + img.h / 2
+        draw_y = 100 + img.h / 2
         draw_x = self.Jondahl.x
         if self.Jondahl.face_dir > 0:
             img.composite_draw(0, 'h', draw_x, draw_y)
@@ -430,7 +430,7 @@ class Jondahl_Idle:
 
 class Jondahl:
     def __init__(self):
-        self.x, self.y = 97, 50
+        self.x, self.y = 97, 150
         self.frameX = 0
         self.frameY = 0
         self.face_dir = 1
@@ -533,7 +533,7 @@ class Zizou_Olympia_NomalSkill:
     def draw(self):
         # 화면 출력 시 바라보는 방향(face_dir)을 사용해서 멈춰있을 때도 올바른 뒤집기 유지
         img = self.Zizou_Olympia.images['Zizou Olympia_NomalSkill'][int(self.Zizou_Olympia.frameX)]
-        draw_y = 0 + img.h / 2
+        draw_y = 100 + img.h / 2
         draw_x = self.Zizou_Olympia.x
         if self.Zizou_Olympia.face_dir > 0:
             img.composite_draw(0, 'h', draw_x, draw_y)
@@ -583,7 +583,7 @@ class Zizou_Olympia_Attack:
         if not imgs:
             return
         img = imgs[0]
-        draw_y = 0 + img.h / 2
+        draw_y = 100 + img.h / 2
         draw_x = self.Zizou_Olympia.x
         if self.Zizou_Olympia.face_dir > 0:
             img.composite_draw(0, 'h', draw_x, draw_y)
@@ -628,7 +628,7 @@ class Zizou_Olympia_Run:
     def draw(self):
         # 화면 출력 시 바라보는 방향(face_dir)을 사용해서 멈춰있을 때도 올바른 뒤집기 유지
         img = self.Zizou_Olympia.images['Zizou Olympia_Run'][int(self.Zizou_Olympia.frameX)]
-        draw_y = 0 + img.h / 2
+        draw_y = 100 + img.h / 2
         draw_x = self.Zizou_Olympia.x
         if self.Zizou_Olympia.face_dir > 0:
             img.composite_draw(0, 'h', draw_x, draw_y)
@@ -660,7 +660,7 @@ class Zizou_Olympia_Idle:
     def draw(self):
         # 원본 크기로 중앙 정렬하여 그려 좌우 흔들림을 제거 (스케일링 없음)
         img = self.Zizou_Olympia.images['Zizou Olympia_Idle'][int(self.Zizou_Olympia.frameX)]
-        draw_y = 0 + img.h / 2
+        draw_y = 100 + img.h / 2
         draw_x = self.Zizou_Olympia.x
         if self.Zizou_Olympia.face_dir > 0:
             img.composite_draw(0, 'h', draw_x, draw_y)
@@ -669,7 +669,7 @@ class Zizou_Olympia_Idle:
 
 class Zizou_Olympia:
     def __init__(self):
-        self.x, self.y = 97, 55
+        self.x, self.y = 97, 150
         self.frameX = 0
         self.frameY = 0
         self.face_dir = 1
@@ -771,7 +771,7 @@ class Franzer_NomalSkill:
     def draw(self):
         # 원본 크기로 중앙 정렬하여 그려 좌우 흔들림을 제거 (스케일링 없음)
         img = self.Franzer.images['Franzer_NomalSkill'][int(self.Franzer.frameX)]
-        draw_y = 0 + img.h / 2
+        draw_y = 100 + img.h / 2
         draw_x = self.Franzer.x
         if self.Franzer.face_dir > 0:
             img.composite_draw(0, 'h', draw_x, draw_y)
@@ -809,7 +809,7 @@ class Franzer_Attack:
     def draw(self):
         # 원본 크기로 중앙 정렬하여 그려 좌우 흔들림을 제거 (스케일링 없음)
         img = self.Franzer.images['Franzer_Attack'][int(self.Franzer.frameX)]
-        draw_y = 0 + img.h / 2
+        draw_y = 100 + img.h / 2
         draw_x = self.Franzer.x
         if self.Franzer.face_dir > 0:
             img.composite_draw(0, 'h', draw_x, draw_y)
@@ -852,7 +852,7 @@ class Franzer_Run:
 
     def draw(self):
         img = self.Franzer.images['Franzer_Run'][int(self.Franzer.frameX)]
-        draw_y = 0 + img.h / 2
+        draw_y = 100 + img.h / 2
         draw_x = self.Franzer.x
         if self.Franzer.face_dir > 0:
             img.composite_draw(0, 'h', draw_x, draw_y)
@@ -885,7 +885,7 @@ class Franzer_Idle:
     def draw(self):
         # 원본 크기로 중앙 정렬하여 그려 좌우 흔들림을 제거 (스케일링 없음)
         img = self.Franzer.images['Franzer_Idle'][int(self.Franzer.frameX)]
-        draw_y = 0 + img.h / 2
+        draw_y = 100 + img.h / 2
         draw_x = self.Franzer.x
         if self.Franzer.face_dir > 0:
             img.composite_draw(0, 'h', draw_x, draw_y)
@@ -894,7 +894,7 @@ class Franzer_Idle:
 
 class Franzer:
     def __init__(self):
-        self.x, self.y = 97, 50
+        self.x, self.y = 97, 100
         self.frameX = 0
         self.frameY = 0
         self.face_dir = 1
