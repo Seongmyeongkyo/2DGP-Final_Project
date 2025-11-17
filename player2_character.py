@@ -12,6 +12,7 @@ from zizou_olympia_nomal_skill_attack import Zizou_Olympia_Nomal_Skill_Attack2
 
 from al_cut_scene import Al_Cut_scene2
 from jondahl_cut_scene import Jondahl_Cut_scene2
+from zizou_olympia_cut_scene import Zizou_Olympia_Cut_scene2
 
 # 이벤트를 체크하는 함수들을 구현
 # e = state_event
@@ -589,6 +590,57 @@ class Jondahl:
 
 
 # 세 번째 캐릭터 구현
+class Zizou_Olympia_UltimateSkill:
+    def __init__(self, zizou_Olympia):
+        self.Zizou_Olympia = zizou_Olympia
+
+    def enter(self, e):
+        # keyup이 아닌 keydown으로 방향을 결정해야 함
+        if l_down(e):
+            self.Zizou_Olympia.dir = self.Zizou_Olympia.face_dir = 1
+        elif j_down(e):
+            self.Zizou_Olympia.dir = self.Zizou_Olympia.face_dir = -1
+        if p_down(e):
+            game_framework.push_mode(Zizou_Olympia_Cut_scene2(self.Zizou_Olympia.x, self.Zizou_Olympia.y, -1))
+
+        # 스킬 임펙트 생성 플래그
+        self.Zizou_Olympia.skill_triggered = False
+
+    def exit(self, e):
+        self.Zizou_Olympia.frameX = 0
+        self.Zizou_Olympia.skill_triggered = False
+        pass
+
+    def do(self):
+        # 애니메이션 길이와 프레임 타임을 소유자에서 가져와 계산
+        length = self.Zizou_Olympia.frames_per_animation.get('Zizou Olympia_NomalSkill', 1)
+
+        self.Zizou_Olympia.TIME_PER_ACTION = 1.0
+        self.Zizou_Olympia.ACTION_PER_TIME = 1.0 / self.Zizou_Olympia.TIME_PER_ACTION
+
+        increment = length * self.Zizou_Olympia.ACTION_PER_TIME * game_framework.frame_time
+        self.Zizou_Olympia.frameX = (self.Zizou_Olympia.frameX + increment)
+
+        # 스킬 임팩트 생성 시점에 한 번만 호출
+        if not self.Zizou_Olympia.skill_triggered and int(self.Zizou_Olympia.frameX) == 2:
+            self.Zizou_Olympia.nomalSkill_attack()
+            self.Zizou_Olympia.skill_triggered = True
+
+        if self.Zizou_Olympia.frameX >= length:
+            self.Zizou_Olympia.state_machine.handle_state_event(('TIMEOUT', None))
+
+
+    def draw(self):
+        # 화면 출력 시 바라보는 방향(face_dir)을 사용해서 멈춰있을 때도 올바른 뒤집기 유지
+        img = self.Zizou_Olympia.images['Zizou Olympia_NomalSkill'][int(self.Zizou_Olympia.frameX)]
+        draw_y = 100 + img.h / 2
+        draw_x = self.Zizou_Olympia.x
+        if self.Zizou_Olympia.face_dir > 0:
+            img.composite_draw(0, 'h', draw_x, draw_y)
+        else:
+            img.draw(draw_x, draw_y)
+
+
 class Zizou_Olympia_NomalSkill:
     def __init__(self, zizou_Olympia):
         self.Zizou_Olympia = zizou_Olympia
@@ -797,13 +849,15 @@ class Zizou_Olympia:
         self.RUN = Zizou_Olympia_Run(self)
         self.ATTACK = Zizou_Olympia_Attack(self)
         self.NOMAL_SKILL = Zizou_Olympia_NomalSkill(self)
+        self.ULTIMATE_SKILL = Zizou_Olympia_UltimateSkill(self)
         self.state_machine = StateMachine(
             self.IDLE,
             {
-                self.IDLE: {i_down: self.IDLE, k_down: self.IDLE, j_down : self.RUN, l_down :self.RUN, u_down : self.ATTACK, o_down : self.NOMAL_SKILL},
-                self.RUN : {j_up : self.IDLE, l_up : self.IDLE, j_down : self.RUN, l_down : self.RUN, u_down : self.ATTACK, o_down : self.NOMAL_SKILL},
-                self.ATTACK : {time_out : self.IDLE, j_down : self.RUN, l_down : self.RUN, u_down : self.ATTACK, o_down : self.NOMAL_SKILL},
+                self.IDLE: {i_down: self.IDLE, k_down: self.IDLE, j_down : self.RUN, l_down :self.RUN, u_down : self.ATTACK, o_down : self.NOMAL_SKILL, p_down : self.ULTIMATE_SKILL},
+                self.RUN : {j_up : self.IDLE, l_up : self.IDLE, j_down : self.RUN, l_down : self.RUN, u_down : self.ATTACK, o_down : self.NOMAL_SKILL, p_down : self.ULTIMATE_SKILL},
+                self.ATTACK : {time_out : self.IDLE, j_down : self.RUN, l_down : self.RUN, u_down : self.ATTACK, o_down : self.NOMAL_SKILL, p_down : self.ULTIMATE_SKILL},
                 self.NOMAL_SKILL : {time_out : self.IDLE},
+                self.ULTIMATE_SKILL : {time_out : self.IDLE},
             }
         )
 
