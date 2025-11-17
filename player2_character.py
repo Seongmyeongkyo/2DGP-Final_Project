@@ -13,6 +13,7 @@ from zizou_olympia_nomal_skill_attack import Zizou_Olympia_Nomal_Skill_Attack2
 from al_cut_scene import Al_Cut_scene2
 from jondahl_cut_scene import Jondahl_Cut_scene2
 from zizou_olympia_cut_scene import Zizou_Olympia_Cut_scene2
+from franzer_cut_scene import Franzer_Cut_scene2
 
 # 이벤트를 체크하는 함수들을 구현
 # e = state_event
@@ -890,6 +891,46 @@ class Zizou_Olympia:
 
 
 # 네 번째 캐릭터 구현
+class Franzer_UltimateSkill:
+    def __init__(self, franzer):
+        self.Franzer = franzer
+
+    def enter(self, e):
+        # keyup이 아닌 keydown으로 방향을 결정해야 함
+        if l_down(e):
+            self.Franzer.dir = self.Franzer.face_dir = 1
+        elif j_down(e):
+            self.Franzer.dir = self.Franzer.face_dir = -1
+        if p_down(e):
+            game_framework.push_mode(Franzer_Cut_scene2(self.Franzer.x, self.Franzer.y, -1))
+
+    def exit(self, e):
+        self.Franzer.frameX = 0
+        pass
+
+    def do(self):
+        # 애니메이션 길이와 프레임 타임을 소유자에서 가져와 계산
+        length = self.Franzer.frames_per_animation.get('Franzer_NomalSkill', 1)
+        self.Franzer.TIME_PER_ACTION = 1.0
+        self.Franzer.ACTION_PER_TIME = 1.0 / self.Franzer.TIME_PER_ACTION
+
+        increment = length * self.Franzer.ACTION_PER_TIME * game_framework.frame_time
+        self.Franzer.frameX = (self.Franzer.frameX + increment)
+
+        if self.Franzer.frameX >= length:
+            self.Franzer.state_machine.handle_state_event(('TIMEOUT', None))
+
+    def draw(self):
+        # 원본 크기로 중앙 정렬하여 그려 좌우 흔들림을 제거 (스케일링 없음)
+        img = self.Franzer.images['Franzer_NomalSkill'][int(self.Franzer.frameX)]
+        draw_y = 100 + img.h / 2
+        draw_x = self.Franzer.x
+        if self.Franzer.face_dir > 0:
+            img.composite_draw(0, 'h', draw_x, draw_y)
+        else:
+            img.draw(draw_x, draw_y)
+
+
 class Franzer_NomalSkill:
     def __init__(self, franzer):
         self.Franzer = franzer
@@ -1075,13 +1116,15 @@ class Franzer:
         self.RUN = Franzer_Run(self)
         self.ATTACK = Franzer_Attack(self)
         self.NOMAL_SKILL = Franzer_NomalSkill(self)
+        self.ULTIMATE_SKILL = Franzer_UltimateSkill(self)
         self.state_machine = StateMachine(
             self.IDLE,
             {
-                self.IDLE: {i_down: self.IDLE, k_down: self.IDLE, j_down : self.RUN, l_down :self.RUN, u_down : self.ATTACK, o_down : self.NOMAL_SKILL},
-                self.RUN : {j_up : self.IDLE, l_up : self.IDLE, j_down : self.RUN, l_down : self.RUN, u_down : self.ATTACK, o_down : self.NOMAL_SKILL},
-                self.ATTACK : {time_out : self.IDLE, j_down : self.RUN, l_down : self.RUN, u_down : self.ATTACK, o_down : self.NOMAL_SKILL},
+                self.IDLE: {i_down: self.IDLE, k_down: self.IDLE, j_down : self.RUN, l_down :self.RUN, u_down : self.ATTACK, o_down : self.NOMAL_SKILL, p_down : self.ULTIMATE_SKILL},
+                self.RUN : {j_up : self.IDLE, l_up : self.IDLE, j_down : self.RUN, l_down : self.RUN, u_down : self.ATTACK, o_down : self.NOMAL_SKILL, p_down : self.ULTIMATE_SKILL},
+                self.ATTACK : {time_out : self.IDLE, j_down : self.RUN, l_down : self.RUN, u_down : self.ATTACK, o_down : self.NOMAL_SKILL, p_down : self.ULTIMATE_SKILL},
                 self.NOMAL_SKILL : {time_out : self.IDLE},
+                self.ULTIMATE_SKILL : {time_out : self.IDLE},
             }
         )
 
