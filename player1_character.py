@@ -9,6 +9,8 @@ from al_nomal_skill_attack import Al_Nomal_Skill_Attack
 from jondahl_nomal_skill_attack import Jondahl_Nomal_Skill_Attack
 from zizou_olympia_nomal_skill_attack import Zizou_Olympia_Nomal_Skill_Attack
 
+from al_cut_scene import Al_Cut_scene
+
 # 이벤트를 체크하는 함수들을 구현
 # e = state_event
 
@@ -43,6 +45,47 @@ RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
 
 
 # 첫 번째 캐릭터 구현
+class Al_UltimateSkill:
+
+    def __init__(self, al):
+        self.Al = al
+
+    def enter(self, e):
+        if d_down(e):
+            self.Al.dir = self.Al.face_dir = 1
+        elif a_down(e):
+            self.Al.dir = self.Al.face_dir = -1
+        if r_down(e):
+            game_framework.push_mode(Al_Cut_scene(self.Al.x, self.Al.y, self.Al.face_dir))
+
+    def exit(self, e):
+        self.Al.frameX = 0
+        pass
+
+    def do(self):
+
+        # 애니메이션 길이와 프레임 타임을 소유자에서 가져와 계산
+        length = self.Al.frames_per_animation.get('Al_NomalSkill', 1)
+
+        self.Al.TIME_PER_ACTION = 0.3
+        self.Al.ACTION_PER_TIME = 1.0 / self.Al.TIME_PER_ACTION
+
+        increment = length * self.Al.ACTION_PER_TIME * game_framework.frame_time
+        self.Al.frameX = (self.Al.frameX + increment)
+
+        if self.Al.frameX >= length:
+            self.Al.state_machine.handle_state_event(('TIMEOUT', None))
+
+    def draw(self):
+        # 원본 크기로 중앙 정렬하여 그려 좌우 흔들림을 제거 (스케일링 없음)
+        img = self.Al.images['Al_NomalSkill'][int(self.Al.frameX)]
+        draw_y = 100 + img.h / 2
+        draw_x = self.Al.x
+        if self.Al.face_dir > 0:
+            img.composite_draw(0, 'h', draw_x, draw_y)
+        else:
+            img.draw(draw_x, draw_y)
+
 class Al_NomalSkill:
 
     def __init__(self, al):
@@ -241,13 +284,16 @@ class Al:
         self.RUN = Al_Run(self)
         self.ATTACK = Al_Attack(self)
         self.NOMALSKILL = Al_NomalSkill(self)
+        self.UlTIMATESKILL = Al_UltimateSkill(self)
         self.state_machine = StateMachine(
             self.IDLE,
             {
-                self.IDLE: {w_down: self.IDLE, s_down: self.IDLE, a_down : self.RUN, d_down :self.RUN, q_down : self.ATTACK, e_down : self.NOMALSKILL},
-                self.RUN : {d_up : self.IDLE, a_up : self.IDLE, a_down : self.RUN, d_down : self.RUN, q_down : self.ATTACK, e_down : self.NOMALSKILL},
-                self.ATTACK : {time_out : self.IDLE, a_down : self.RUN, d_down : self.RUN, q_down : self.ATTACK, e_down : self.NOMALSKILL},
+                self.IDLE: {w_down: self.IDLE, s_down: self.IDLE, a_down : self.RUN, d_down :self.RUN, q_down : self.ATTACK, e_down : self.NOMALSKILL, r_down : self.UlTIMATESKILL},
+                self.RUN : {d_up : self.IDLE, a_up : self.IDLE, a_down : self.RUN, d_down : self.RUN, q_down : self.ATTACK, e_down : self.NOMALSKILL, r_down : self.UlTIMATESKILL},
+                self.ATTACK : {time_out : self.IDLE, a_down : self.RUN, d_down : self.RUN, q_down : self.ATTACK, e_down : self.NOMALSKILL, r_down : self.UlTIMATESKILL},
                 self.NOMALSKILL : {time_out : self.IDLE},
+                self.UlTIMATESKILL : {time_out : self.IDLE},
+
             }
         )
 
