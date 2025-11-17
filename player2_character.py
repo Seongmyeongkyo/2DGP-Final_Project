@@ -10,6 +10,8 @@ from al_nomal_skill_attack import Al_Nomal_Skill_Attack2
 from jondahl_nomal_skill_attack import Jondahl_Nomal_Skill_Attack2
 from zizou_olympia_nomal_skill_attack import Zizou_Olympia_Nomal_Skill_Attack2
 
+from al_cut_scene import Al_Cut_scene2
+
 # 이벤트를 체크하는 함수들을 구현
 # e = state_event
 
@@ -43,6 +45,48 @@ RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
 RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
 
 # 첫 번째 캐릭터 구현
+class Al_UltimateSkill:
+
+    def __init__(self, al):
+        self.Al = al
+
+    def enter(self, e):
+        if l_down(e):
+            self.Al.dir = self.Al.face_dir = 1
+        elif j_down(e):
+            self.Al.dir = self.Al.face_dir = -1
+        if p_down(e):
+            game_framework.push_mode(Al_Cut_scene2(self.Al.x, self.Al.y, -1))
+
+    def exit(self, e):
+        self.Al.frameX = 0
+        pass
+
+    def do(self):
+
+        # 애니메이션 길이와 프레임 타임을 소유자에서 가져와 계산
+        length = self.Al.frames_per_animation.get('Al_NomalSkill', 1)
+
+        self.Al.TIME_PER_ACTION = 0.3
+        self.Al.ACTION_PER_TIME = 1.0 / self.Al.TIME_PER_ACTION
+
+        increment = length * self.Al.ACTION_PER_TIME * game_framework.frame_time
+        self.Al.frameX = (self.Al.frameX + increment)
+
+        if self.Al.frameX >= length:
+            self.Al.state_machine.handle_state_event(('TIMEOUT', None))
+
+    def draw(self):
+        # 원본 크기로 중앙 정렬하여 그려 좌우 흔들림을 제거 (스케일링 없음)
+        img = self.Al.images['Al_NomalSkill'][int(self.Al.frameX)]
+        draw_y = 100 + img.h / 2
+        draw_x = self.Al.x
+        if self.Al.face_dir > 0:
+            img.composite_draw(0, 'h', draw_x, draw_y)
+        else:
+            img.draw(draw_x, draw_y)
+
+
 class Al_NomalSkill:
 
     def __init__(self, al):
@@ -237,13 +281,15 @@ class Al:
         self.RUN = Al_Run(self)
         self.ATTACK = Al_Attack(self)
         self.NOMAL_SKILL = Al_NomalSkill(self)
+        self.ULTIMATE_SKILL = Al_UltimateSkill(self)
         self.state_machine = StateMachine(
             self.IDLE,
             {
-                self.IDLE: {i_down: self.IDLE, k_down: self.IDLE, j_down : self.RUN, l_down :self.RUN, u_down : self.ATTACK, o_down : self.NOMAL_SKILL},
-                self.RUN : {l_up : self.IDLE, j_up : self.IDLE, j_down : self.RUN, l_down : self.RUN, u_down : self.ATTACK, o_down : self.NOMAL_SKILL},
-                self.ATTACK : {time_out : self.IDLE, j_down : self.RUN, l_down : self.RUN, u_down : self.ATTACK, o_down : self.NOMAL_SKILL},
+                self.IDLE: {i_down: self.IDLE, k_down: self.IDLE, j_down : self.RUN, l_down :self.RUN, u_down : self.ATTACK, o_down : self.NOMAL_SKILL, p_down : self.ULTIMATE_SKILL},
+                self.RUN : {l_up : self.IDLE, j_up : self.IDLE, j_down : self.RUN, l_down : self.RUN, u_down : self.ATTACK, o_down : self.NOMAL_SKILL, p_down : self.ULTIMATE_SKILL},
+                self.ATTACK : {time_out : self.IDLE, j_down : self.RUN, l_down : self.RUN, u_down : self.ATTACK, o_down : self.NOMAL_SKILL, p_down : self.ULTIMATE_SKILL},
                 self.NOMAL_SKILL : {time_out : self.IDLE},
+                self.ULTIMATE_SKILL : {time_out : self.IDLE},
             }
         )
 
