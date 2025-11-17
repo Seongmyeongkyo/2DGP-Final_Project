@@ -10,6 +10,7 @@ from jondahl_nomal_skill_attack import Jondahl_Nomal_Skill_Attack
 from zizou_olympia_nomal_skill_attack import Zizou_Olympia_Nomal_Skill_Attack
 
 from al_cut_scene import Al_Cut_scene
+from jondahl_cut_scene import Jondahl_Cut_scene
 
 # 이벤트를 체크하는 함수들을 구현
 # e = state_event
@@ -317,6 +318,55 @@ class Al:
             game_world.add_object(al_nomal_skill_attack, 1)
 
 # 두 번째 캐릭터 구현
+class Jondahl_UltimateSkill:
+    def __init__(self, jondahl):
+        self.Jondahl = jondahl
+
+    def enter(self, e):
+        # keyup이 아닌 keydown으로 방향을 결정해야 함
+        if d_down(e):
+            self.Jondahl.dir = self.Jondahl.face_dir = 1
+        elif a_down(e):
+            self.Jondahl.dir = self.Jondahl.face_dir = -1
+        if r_down(e):
+            game_framework.push_mode(Jondahl_Cut_scene(self.Jondahl.x, self.Jondahl.y, self.Jondahl.face_dir))
+        # 스킬 임펙트 생성 플래그
+        self.Jondahl.skill_triggered = False
+
+    def exit(self, e):
+        self.Jondahl.frameX = 0
+        self.Jondahl.skill_triggered = False
+        pass
+
+    def do(self):
+        # 애니메이션 길이와 프레임 타임을 소유자에서 가져와 계산
+        length = self.Jondahl.frames_per_animation.get('Jondahl_NomalSkill', 1)
+
+        self.Jondahl.TIME_PER_ACTION = 1.0
+        self.Jondahl.ACTION_PER_TIME = 1.0 / self.Jondahl.TIME_PER_ACTION
+
+        increment = length * self.Jondahl.ACTION_PER_TIME * game_framework.frame_time
+        self.Jondahl.frameX = (self.Jondahl.frameX + increment)
+
+        # 스킬 임팩트 생성 시점에 한 번만 호출
+        if not self.Jondahl.skill_triggered and int(self.Jondahl.frameX) == 9:
+            self.Jondahl.nomalSkill_attack()
+            self.Jondahl.skill_triggered = True
+
+        if self.Jondahl.frameX >= length - 1:
+            self.Jondahl.state_machine.handle_state_event(('TIMEOUT', None))
+
+    def draw(self):
+        # 원본 크기로 중앙 정렬하여 그려 좌우 흔들림을 제거 (스케일링 없음)
+        img = self.Jondahl.images['Jondahl_NomalSkill'][int(self.Jondahl.frameX)]
+        draw_y = 100 + img.h / 2
+        draw_x = self.Jondahl.x
+        if self.Jondahl.face_dir > 0:
+            img.composite_draw(0, 'h', draw_x, draw_y)
+        else:
+            img.draw(draw_x, draw_y)
+
+
 class Jondahl_NomalSkill:
     def __init__(self, jondahl):
         self.Jondahl = jondahl
@@ -511,13 +561,15 @@ class Jondahl:
         self.RUN = Jondahl_Run(self)
         self.ATTACK = Jondahl_Attack(self)
         self.NOMALSKILL = Jondahl_NomalSkill(self)
+        self.UlTIMATESKILL = Jondahl_UltimateSkill(self)
         self.state_machine = StateMachine(
             self.IDLE,
             {
-                self.IDLE: {w_down: self.IDLE, s_down: self.IDLE, a_down : self.RUN, d_down :self.RUN, q_down : self.ATTACK, e_down : self.NOMALSKILL},
-                self.RUN : {d_up : self.IDLE, a_up : self.IDLE, a_down : self.RUN, d_down : self.RUN, q_down : self.ATTACK, e_down : self.NOMALSKILL},
-                self.ATTACK : {time_out : self.IDLE, a_down : self.RUN, d_down : self.RUN, q_down : self.ATTACK, e_down : self.NOMALSKILL},
+                self.IDLE: {w_down: self.IDLE, s_down: self.IDLE, a_down : self.RUN, d_down :self.RUN, q_down : self.ATTACK, e_down : self.NOMALSKILL, r_down : self.UlTIMATESKILL},
+                self.RUN : {d_up : self.IDLE, a_up : self.IDLE, a_down : self.RUN, d_down : self.RUN, q_down : self.ATTACK, e_down : self.NOMALSKILL, r_down : self.UlTIMATESKILL},
+                self.ATTACK : {time_out : self.IDLE, a_down : self.RUN, d_down : self.RUN, q_down : self.ATTACK, e_down : self.NOMALSKILL, r_down : self.UlTIMATESKILL},
                 self.NOMALSKILL : {time_out : self.IDLE},
+                self.UlTIMATESKILL : {time_out : self.IDLE},
             }
         )
 
