@@ -39,7 +39,7 @@ class Al_Ultimate_Skill_Attack:
         # 원본 크기로 중앙 정렬하여 그려 좌우 흔들림을 제거 (스케일링 없음)
         img = self.images['Al_UltimateSkill_Attack'][int(self.frameX)]
         draw_x = self.x
-        draw_y = self.y + img.h * 2
+        draw_y = self.y / 1.5 + img.h * 2
         if self.face_dir < 0:
             img.composite_draw(0, 'h', draw_x, draw_y, img.w * 5, img.h * 5)
         else:
@@ -94,7 +94,7 @@ class Al_Ultimate_Skill_Attack2:
         # 원본 크기로 중앙 정렬하여 그려 좌우 흔들림을 제거 (스케일링 없음)
         img = self.images['Al_UltimateSkill_Attack'][int(self.frameX)]
         draw_x = self.x
-        draw_y = self.y + img.h * 2
+        draw_y = self.y / 1.5 + img.h * 2
         if self.face_dir < 0:
             img.composite_draw(0, 'h', draw_x, draw_y, img.w * 5, img.h * 5)
         else:
