@@ -15,6 +15,11 @@ from jondahl_cut_scene import Jondahl_Cut_scene2
 from zizou_olympia_cut_scene import Zizou_Olympia_Cut_scene2
 from franzer_cut_scene import Franzer_Cut_scene2
 
+from al_profile import Al_profile2
+from jondahl_profile import Jondahl_profile2
+from zizou_olympia_profile import Zizou_Olympia_profile2
+from franzer_profile import Franzer_profile2
+
 # 이벤트를 체크하는 함수들을 구현
 # e = state_event
 
@@ -264,6 +269,8 @@ class Al:
         self.ACTION_PER_TIME = 1.0 / self.TIME_PER_ACTION
         # per-animation frame count 저장
         self.frames_per_animation = {}
+        # 캐릭터 이미지 프로필 객체 생성
+        self.al_profile = Al_profile2()
 
         for name in self.animation_names:
             if name == 'Al_Idle':
@@ -306,6 +313,7 @@ class Al:
 
     def draw(self):
         self.state_machine.draw()
+        game_world.add_object(self.al_profile, 2)
 
     def nomalSkill_attack(self):
         if self.face_dir > 0:
@@ -539,6 +547,9 @@ class Jondahl:
         self.ACTION_PER_TIME = 1.0 / self.TIME_PER_ACTION
         # per-animation frame count 저장
         self.frames_per_animation = {}
+        # 캐릭터 이미지 프로필 객체 생성
+        self.jondahl_profile = Jondahl_profile2()
+
         for name in self.animation_names:
             if name == 'Jondahl_Idle':
                 frames = [load_image("./Jondahl/" + name + " (%d)" % i + ".png") for i in range(1, 23)]
@@ -580,6 +591,7 @@ class Jondahl:
 
     def draw(self):
         self.state_machine.draw()
+        game_world.add_object(self.jondahl_profile, 2)
 
     def nomalSkill_attack(self):
         if self.face_dir > 0:
@@ -831,6 +843,8 @@ class Zizou_Olympia:
         self.ACTION_PER_TIME = 1.0 / self.TIME_PER_ACTION
         # per-animation frame count 저장
         self.frames_per_animation = {}
+        # 캐릭터 프로필 이미지 객체 생성
+        self.zizou_olympia_profile = Zizou_Olympia_profile2()
         for name in self.animation_names:
             if name == 'Zizou Olympia_Idle':
                 frames = [load_image("./Zizou_Olympia/" + name + " (%d)" % i + ".png") for i in range(1, 16)]
@@ -872,6 +886,7 @@ class Zizou_Olympia:
 
     def draw(self):
         self.state_machine.draw()
+        game_world.add_object(self.zizou_olympia_profile, 2)
 
     def nomal_attack(self):
         if self.face_dir < 0:
@@ -1097,6 +1112,8 @@ class Franzer:
         self.ACTION_PER_TIME = 1.0 / self.TIME_PER_ACTION
         # per-animation frame count 저장
         self.frames_per_animation = {}
+        # 캐릭터 이미지 프로필 객체 생성
+        self.franzer_profile = Franzer_profile2()
         for name in self.animation_names:
             if name == 'Franzer_Idle':
                 frames = [load_image("./Franzer/" + name + " (%d)" % i + ".png") for i in range(1, 4)]
@@ -1138,3 +1155,4 @@ class Franzer:
 
     def draw(self):
         self.state_machine.draw()
+        game_world.add_object(self.franzer_profile, 2)
