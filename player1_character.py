@@ -1,4 +1,5 @@
 from pico2d import *
+
 from state_machine import StateMachine
 import game_world
 import game_framework
@@ -13,6 +14,11 @@ from al_cut_scene import Al_Cut_scene
 from jondahl_cut_scene import Jondahl_Cut_scene
 from zizou_olympia_cut_scene import Zizou_Olympia_Cut_scene
 from franzer_cut_scene import Franzer_Cut_scene
+
+from al_profile import Al_profile
+from jondahl_profile import Jondahl_profile
+from zizou_olympia_profile import Zizou_Olympia_profile
+from franzer_profile import Franzer_profile
 
 # 이벤트를 체크하는 함수들을 구현
 # e = state_event
@@ -263,6 +269,8 @@ class Al:
         self.ACTION_PER_TIME = 1.0 / self.TIME_PER_ACTION
         # per-animation frame count 저장
         self.frames_per_animation = {}
+        # 캐릭터 프로필 이미지 객체 생성
+        self.al_profile = Al_profile()
 
         for name in self.animation_names:
             if name == 'Al_Idle':
@@ -296,7 +304,6 @@ class Al:
                 self.ATTACK : {time_out : self.IDLE, a_down : self.RUN, d_down : self.RUN, q_down : self.ATTACK, e_down : self.NOMALSKILL, r_down : self.UlTIMATESKILL},
                 self.NOMALSKILL : {time_out : self.IDLE},
                 self.UlTIMATESKILL : {time_out : self.IDLE},
-
             }
         )
 
@@ -310,6 +317,7 @@ class Al:
 
     def draw(self):
         self.state_machine.draw()
+        game_world.add_object(self.al_profile, 2)
 
     def nomalSkill_attack(self):
         if self.face_dir > 0:
@@ -543,6 +551,8 @@ class Jondahl:
         self.ACTION_PER_TIME = 1.0 / self.TIME_PER_ACTION
         # per-animation frame count 저장
         self.frames_per_animation = {}
+        # 캐릭터 프로필 이미지 객체 생성
+        self.jondahl_profile = Jondahl_profile()
 
         for name in self.animation_names:
             if name == 'Jondahl_Idle':
@@ -585,6 +595,7 @@ class Jondahl:
 
     def draw(self):
         self.state_machine.draw()
+        game_world.add_object(self.jondahl_profile, 2)
 
     def nomalSkill_attack(self):
         if self.face_dir > 0:
@@ -834,6 +845,8 @@ class Zizou_Olympia:
         self.ACTION_PER_TIME = 1.0 / self.TIME_PER_ACTION
         # per-animation frame count 저장
         self.frames_per_animation = {}
+        # 캐릭터 프로필 이미지 객체 생성
+        self.zizou_olympia_profile = Zizou_Olympia_profile()
 
         for name in self.animation_names:
             if name == 'Zizou Olympia_Idle':
@@ -876,6 +889,7 @@ class Zizou_Olympia:
 
     def draw(self):
         self.state_machine.draw()
+        game_world.add_object(self.zizou_olympia_profile, 2)
 
     def nomal_attack(self):
         if self.face_dir > 0:
@@ -1102,6 +1116,7 @@ class Franzer:
         self.ACTION_PER_TIME = 1.0 / self.TIME_PER_ACTION
         # per-animation frame count 저장
         self.frames_per_animation = {}
+        self.franzer_profile = Franzer_profile()
 
         for name in self.animation_names:
             if name == 'Franzer_Idle':
@@ -1144,3 +1159,4 @@ class Franzer:
 
     def draw(self):
         self.state_machine.draw()
+        game_world.add_object(self.franzer_profile, 2)
