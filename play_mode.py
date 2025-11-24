@@ -6,6 +6,8 @@ import game_world
 import player1_character
 import player2_character
 import Play_background
+import Hp_Ui
+import Mana_Ui
 
 
 def handle_events():
@@ -88,7 +90,7 @@ def handle_events():
 
 
 def init():
-    global player1, player2, background
+    global player1, player2, background, player1_Hp, player2_Hp, player1_Mana, player2_Mana
 
     game_world.clear()
 
@@ -100,6 +102,18 @@ def init():
 
     player2 = player2_character.Al()
     game_world.add_object(player2, 1)
+
+    player1_Hp = Hp_Ui.Player1_Hp_Ui()
+    game_world.add_object(player1_Hp, 3)
+
+    player2_Hp = Hp_Ui.Player2_Hp_Ui()
+    game_world.add_object(player2_Hp, 3)
+
+    player1_Mana = Mana_Ui.Player1_Mana_Ui()
+    game_world.add_object(player1_Mana, 3)
+
+    player2_Mana = Mana_Ui.Player2_Mana_Ui()
+    game_world.add_object(player2_Mana, 3)
 
 
 def update():
