@@ -4,17 +4,22 @@ from state_machine import StateMachine
 import game_world
 import game_framework
 
+# 캐릭터 일반공격 및 스킬 발사체 임포트
 from olympia_attack import Olympia_attack
 
 from al_nomal_skill_attack import Al_Nomal_Skill_Attack
 from jondahl_nomal_skill_attack import Jondahl_Nomal_Skill_Attack
 from zizou_olympia_nomal_skill_attack import Zizou_Olympia_Nomal_Skill_Attack
 
+from al_ultimate_skill_attack import Al_Ultimate_Skill_Attack
+
+# 캐릭터 궁극기 스킬 컷신 임포트
 from al_cut_scene import Al_Cut_scene
 from jondahl_cut_scene import Jondahl_Cut_scene
 from zizou_olympia_cut_scene import Zizou_Olympia_Cut_scene
 from franzer_cut_scene import Franzer_Cut_scene
 
+# 캐릭터 프로필 이미지 임포트
 from al_profile import Al_profile
 from jondahl_profile import Jondahl_profile
 from zizou_olympia_profile import Zizou_Olympia_profile
@@ -67,27 +72,36 @@ class Al_UltimateSkill:
         if r_down(e):
             game_framework.push_mode(Al_Cut_scene(self.Al.x, self.Al.y, 1))
 
+        # 스킬 임펙트 생성 플래그
+        self.Al.skill_triggered = False
+
     def exit(self, e):
         self.Al.frameX = 0
+        self.Al.skill_triggered = False
         pass
 
     def do(self):
 
         # 애니메이션 길이와 프레임 타임을 소유자에서 가져와 계산
-        length = self.Al.frames_per_animation.get('Al_NomalSkill', 1)
+        length = self.Al.frames_per_animation.get('Al_UltimateSkill', 1)
 
-        self.Al.TIME_PER_ACTION = 0.3
+        self.Al.TIME_PER_ACTION = 2.0
         self.Al.ACTION_PER_TIME = 1.0 / self.Al.TIME_PER_ACTION
 
         increment = length * self.Al.ACTION_PER_TIME * game_framework.frame_time
         self.Al.frameX = (self.Al.frameX + increment)
+
+        # 스킬 임팩트 생성 시점에 한 번만 호출
+        if not self.Al.skill_triggered and int(self.Al.frameX) == 10:
+            self.Al.ultimateSkill_attack()
+            self.Al.skill_triggered = True
 
         if self.Al.frameX >= length:
             self.Al.state_machine.handle_state_event(('TIMEOUT', None))
 
     def draw(self):
         # 원본 크기로 중앙 정렬하여 그려 좌우 흔들림을 제거 (스케일링 없음)
-        img = self.Al.images['Al_NomalSkill'][int(self.Al.frameX)]
+        img = self.Al.images['Al_UltimateSkill'][int(self.Al.frameX)]
         draw_y = 100 + img.h / 2
         draw_x = self.Al.x
         if self.Al.face_dir > 0:
@@ -260,7 +274,7 @@ class Al:
         self.frameY = 0
         self.face_dir = 1
         self.dir = 1
-        self.animation_names = ['Al_Idle', 'Al_Run', 'Al_Attack', 'Al_NomalSkill']
+        self.animation_names = ['Al_Idle', 'Al_Run', 'Al_Attack', 'Al_NomalSkill', 'Al_UltimateSkill']
         self.images = {}
         # 각 애니메이션별로 최대 프레임 너비/높이를 저장하면 출력 크기를 통일하여 흔들림을 방지할 수 있음
         self.render_size = {}
@@ -284,6 +298,9 @@ class Al:
 
             elif name == 'Al_NomalSkill':
                 frames = [load_image("./AL/" + name + " (%d)" % i + ".png") for i in range(1, 5)]
+
+            elif name == 'Al_UltimateSkill':
+                frames = [load_image("./AL/" + name + " (%d)" % i + ".png") for i in range(1, 24)]
 
             self.images[name] = frames
             max_w = max(img.w for img in frames)
@@ -326,6 +343,14 @@ class Al:
         else:
             al_nomal_skill_attack = Al_Nomal_Skill_Attack(self.x - 160, self.y + self.y / 3, self.face_dir)
             game_world.add_object(al_nomal_skill_attack, 1)
+
+    def ultimateSkill_attack(self):
+        if self.face_dir > 0:
+            al_ultimate_skill_attack = Al_Ultimate_Skill_Attack(self.x + 160, self.y, self.face_dir)
+            game_world.add_object(al_ultimate_skill_attack, 1)
+        else:
+            al_ultimate_skill_attack = Al_Ultimate_Skill_Attack(self.x - 160, self.y, self.face_dir)
+            game_world.add_object(al_ultimate_skill_attack, 1)
 
 # 두 번째 캐릭터 구현
 class Jondahl_UltimateSkill:
