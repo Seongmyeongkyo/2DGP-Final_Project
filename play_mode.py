@@ -104,16 +104,16 @@ def init():
     game_world.add_object(player2, 1)
 
     player1_Hp = Hp_Ui.Player1_Hp_Ui()
-    game_world.add_object(player1_Hp, 3)
+    game_world.add_object(player1_Hp, 2)
 
     player2_Hp = Hp_Ui.Player2_Hp_Ui()
-    game_world.add_object(player2_Hp, 3)
+    game_world.add_object(player2_Hp, 2)
 
     player1_Mana = Mana_Ui.Player1_Mana_Ui()
-    game_world.add_object(player1_Mana, 3)
+    game_world.add_object(player1_Mana, 2)
 
     player2_Mana = Mana_Ui.Player2_Mana_Ui()
-    game_world.add_object(player2_Mana, 3)
+    game_world.add_object(player2_Mana, 2)
 
 
 def update():
