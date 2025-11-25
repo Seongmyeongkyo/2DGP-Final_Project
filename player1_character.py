@@ -12,6 +12,7 @@ from jondahl_nomal_skill_attack import Jondahl_Nomal_Skill_Attack
 from zizou_olympia_nomal_skill_attack import Zizou_Olympia_Nomal_Skill_Attack
 
 from al_ultimate_skill_attack import Al_Ultimate_Skill_Attack
+from franzer_ultimate_skill_attack import Franzer_Ultimate_Skill_Attack
 
 # 캐릭터 궁극기 스킬 컷신 임포트
 from al_cut_scene import Al_Cut_scene
@@ -56,6 +57,12 @@ RUN_SPEED_KMPH = 20.0  # Km / Hour
 RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
 RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
 RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
+
+FRANZER_PIXEL_PER_METER = (10.0 / 0.1)
+FRANZER_RUN_SPEED_KMPH = 100.0  # Km / Hour
+FRANZER_RUN_SPEED_MPM = (FRANZER_RUN_SPEED_KMPH * 1000.0 / 60.0)
+FRANZER_RUN_SPEED_MPS = (FRANZER_RUN_SPEED_MPM / 60.0)
+FRANZER_RUN_SPEED_PPS = (FRANZER_RUN_SPEED_MPS * FRANZER_PIXEL_PER_METER)
 
 
 # 첫 번째 캐릭터 구현
@@ -947,25 +954,47 @@ class Franzer_UltimateSkill:
         if r_down(e):
             game_framework.push_mode(Franzer_Cut_scene(self.Franzer.x, self.Franzer.y, 1))
 
+        # 이동 플래그 생성
+        self.Franzer.is_moving = True
+        # 스킬 임펙트 생성 플래그
+        self.Franzer.skill_triggered = False
+
     def exit(self, e):
         self.Franzer.frameX = 0
+        self.Franzer.is_moving = True
+        self.Franzer.skill_triggered = False
         pass
 
     def do(self):
         # 애니메이션 길이와 프레임 타임을 소유자에서 가져와 계산
-        length = self.Franzer.frames_per_animation.get('Franzer_NomalSkill', 1)
-        self.Franzer.TIME_PER_ACTION = 1.0
+        length = self.Franzer.frames_per_animation.get('Franzer_UltimateSkill', 1)
+        self.Franzer.TIME_PER_ACTION = 1.5
         self.Franzer.ACTION_PER_TIME = 1.0 / self.Franzer.TIME_PER_ACTION
 
         increment = length * self.Franzer.ACTION_PER_TIME * game_framework.frame_time
         self.Franzer.frameX = (self.Franzer.frameX + increment)
 
+        # 스킬 임팩트 생성 시점에 한 번만 호출
+        if not self.Franzer.skill_triggered and int(self.Franzer.frameX) == 8:
+            self.Franzer.ultimateSkill_attack()
+            self.Franzer.skill_triggered = True
+
         if self.Franzer.frameX >= length:
             self.Franzer.state_machine.handle_state_event(('TIMEOUT', None))
 
+        #위치 업데이트
+        if self.Franzer.is_moving and int(self.Franzer.frameX) == 8:
+            self.Franzer.x += self.Franzer.face_dir * FRANZER_RUN_SPEED_PPS * game_framework.frame_time * 1.5
+            if self.Franzer.x < 0:
+                self.Franzer.x = 0
+            elif self.Franzer.x > 1280:
+                self.Franzer.x = 1280
+            if self.Franzer.frameX >= length:
+                self.Franzer.is_moving = False
+
     def draw(self):
         # 원본 크기로 중앙 정렬하여 그려 좌우 흔들림을 제거 (스케일링 없음)
-        img = self.Franzer.images['Franzer_NomalSkill'][int(self.Franzer.frameX)]
+        img = self.Franzer.images['Franzer_UltimateSkill'][int(self.Franzer.frameX)]
         draw_y = 100 + img.h / 2
         draw_x = self.Franzer.x
         if self.Franzer.face_dir > 0:
@@ -1132,7 +1161,7 @@ class Franzer:
         self.frameY = 0
         self.face_dir = 1
         self.dir = 1
-        self.animation_names = ['Franzer_Idle', 'Franzer_Run','Franzer_Attack', 'Franzer_NomalSkill']
+        self.animation_names = ['Franzer_Idle', 'Franzer_Run','Franzer_Attack', 'Franzer_NomalSkill', 'Franzer_UltimateSkill']
         self.images = {}
         # 각 애니메이션별로 최대 프레임 너비/높이를 저장하면 출력 크기를 통일하여 흔들림을 방지할 수 있음
         self.render_size = {}
@@ -1152,6 +1181,8 @@ class Franzer:
                 frames = [load_image("./Franzer/" + name + " (%d)" % i + ".png") for i in range(1, 5)]
             elif name == 'Franzer_NomalSkill':
                 frames = [load_image("./Franzer/" + name + " (%d)" % i + ".png") for i in range(1, 11)]
+            elif name == 'Franzer_UltimateSkill':
+                frames = [load_image("./Franzer/" + name + " (%d)" % i + ".png") for i in range(1, 13)]
             self.images[name] = frames
             max_w = max(img.w for img in frames)
             max_h = max(img.h for img in frames)
@@ -1185,3 +1216,11 @@ class Franzer:
     def draw(self):
         self.state_machine.draw()
         game_world.add_object(self.franzer_profile, 2)
+
+    def ultimateSkill_attack(self):
+        if self.face_dir > 0:
+            franzer_ultimate_skill_attack = Franzer_Ultimate_Skill_Attack(self.x + 150, self.y + 250, self.face_dir)
+            game_world.add_object(franzer_ultimate_skill_attack, 1)
+        else:
+            franzer_ultimate_skill_attack = Franzer_Ultimate_Skill_Attack(self.x - 150, self.y + 250, self.face_dir)
+            game_world.add_object(franzer_ultimate_skill_attack, 1)
