@@ -16,6 +16,8 @@ def init():
 def finish():
     global image
     del image
+    global font
+    del font
 
 def update():
     pass
