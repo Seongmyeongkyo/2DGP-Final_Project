@@ -126,15 +126,18 @@ class Al_NomalSkill:
             self.Al.dir = self.Al.face_dir = 1
         elif j_down(e):
             self.Al.dir = self.Al.face_dir = -1
-        if o_down(e):
+        if o_down(e) and self.Al.mana >= 50:
             self.Al.nomalSkill_attack()
 
     def exit(self, e):
         self.Al.frameX = 0
-        pass
+        if self.Al.mana >= 50:
+            self.Al.mana -= 50
 
     def do(self):
-
+        if self.Al.mana < 50:
+            self.Al.state_machine.handle_state_event(('TIMEOUT', None))
+            return
         # 애니메이션 길이와 프레임 타임을 소유자에서 가져와 계산
         length = self.Al.frames_per_animation.get('Al_NomalSkill', 1)
 
@@ -281,6 +284,8 @@ class Al:
         self.frameY = 0
         self.face_dir = -1
         self.dir = 1
+        self.max_mana = 150
+        self.mana = 150
         self.animation_names = ['Al_Idle', 'Al_Run', 'Al_Attack', 'Al_NomalSkill', 'Al_UltimateSkill']
         self.images = {}
         # 각 애니메이션별로 최대 프레임 너비/높이를 저장하면 출력 크기를 통일하여 흔들림을 방지할 수 있음
@@ -423,9 +428,14 @@ class Jondahl_NomalSkill:
     def exit(self, e):
         self.Jondahl.frameX = 0
         self.Jondahl.skill_triggered = False
+        if self.Jondahl.mana >= 50:
+            self.Jondahl.mana -= 50
         pass
 
     def do(self):
+        if self.Jondahl.mana < 50:
+            self.Jondahl.state_machine.handle_state_event(('TIMEOUT', None))
+            return
         # 애니메이션 길이와 프레임 타임을 소유자에서 가져와 계산
         length = self.Jondahl.frames_per_animation.get('Jondahl_NomalSkill', 1)
 
@@ -571,6 +581,8 @@ class Jondahl:
         self.frameY = 0
         self.face_dir = -1
         self.dir = -1
+        self.max_mana = 150
+        self.mana = 150
         self.animation_names = ['Jondahl_Idle', 'Jondahl_Run', 'Jondahl_Attack', 'Jondahl_NomalSkill']
         self.images = {}
         self.render_size = {}
@@ -702,9 +714,14 @@ class Zizou_Olympia_NomalSkill:
     def exit(self, e):
         self.Zizou_Olympia.frameX = 0
         self.Zizou_Olympia.skill_triggered = False
+        if self.Zizou_Olympia.mana >= 50:
+            self.Zizou_Olympia.mana -= 50
         pass
 
     def do(self):
+        if self.Zizou_Olympia.mana < 50:
+            self.Zizou_Olympia.state_machine.handle_state_event(('TIMEOUT', None))
+            return
         # 애니메이션 길이와 프레임 타임을 소유자에서 가져와 계산
         length = self.Zizou_Olympia.frames_per_animation.get('Zizou Olympia_NomalSkill', 1)
 
@@ -867,6 +884,8 @@ class Zizou_Olympia:
         self.frameY = 0
         self.face_dir = -1
         self.dir = -1
+        self.max_mana = 150
+        self.mana = 150
         self.animation_names = ['Zizou Olympia_Idle', 'Zizou Olympia_Run', 'Zizou Olympia_Attack', 'Zizou Olympia_NomalSkill']
         self.images = {}
         self.render_size = {}
@@ -1012,9 +1031,14 @@ class Franzer_NomalSkill:
 
     def exit(self, e):
         self.Franzer.frameX = 0
+        if self.Franzer.mana >= 50:
+            self.Franzer.mana -= 50
         pass
 
     def do(self):
+        if self.Franzer.mana < 50:
+            self.Franzer.state_machine.handle_state_event(('TIMEOUT', None))
+            return
         # 애니메이션 길이와 프레임 타임을 소유자에서 가져와 계산
         length = self.Franzer.frames_per_animation.get('Franzer_NomalSkill', 1)
         self.Franzer.TIME_PER_ACTION = 1.0
@@ -1157,6 +1181,8 @@ class Franzer:
         self.frameY = 0
         self.face_dir = -1
         self.dir = 1
+        self.max_mana = 150
+        self.mana = 150
         self.animation_names = ['Franzer_Idle', 'Franzer_Run', 'Franzer_Attack', 'Franzer_NomalSkill', 'Franzer_UltimateSkill']
         self.images = {}
         # 각 애니메이션별로 최대 프레임 너비/높이를 저장하면 출력 크기를 통일하여 흔들림을 방지할 수 있음
