@@ -18,6 +18,8 @@ def init():
     global white_background
     global choice_player1 # 선택된 캐릭터 저장 변수
     global choice_player2 # 선택된 캐릭터 저장 변수
+    global selected_character1
+    global selected_character2
 
     running = True
     font = load_font("./FONT/neodgm.ttf", 40)
@@ -35,16 +37,26 @@ def init():
     choice_player1 = None
     choice_player2 = None
 
+    selected_character1 = False
+    selected_character2 = False
+
 def finish():
-    global font, profiles, white_background, choice_player1, choice_player2
-    del font, profiles, white_background, choice_player1, choice_player2
+    global font, profiles, white_background, choice_player1, choice_player2, selected_character1, selected_character2
+    del font, profiles, white_background, choice_player1, choice_player2, selected_character1, selected_character2
     pass
 def update():
+    # 양쪽 플레이어가 모두 캐릭터를 선택했을 때 게임 모드로 전환
+    # 양쪽 플레이어가 모두 캐릭터를 선택했을 때 게임 모드로 전환
+    if selected_character1 and selected_character2:
+        set_choices(choice_player1, choice_player2)
+        game_framework.change_mode(play_mode)
     pass
 
 def handle_events():
     global choice_player1
     global choice_player2
+    global selected_character1
+    global selected_character2
 
     events = get_events()
     for event in events:
@@ -61,33 +73,43 @@ def handle_events():
             player2_select_x = [650, 790, 810, 950, 970, 1110, 1130, 1270]
             player2_select_y = [260, 460]
 
+
+
             # player 1 캐릭터 선택 로직
             if player1_select_x[0] <= mx <= player1_select_x[1] and player1_select_y[0] <= my <= player1_select_y[1]:
                 print("player 1 selected Al")
                 choice_player1 = "Al"
-            elif player1_select_x[2] <= mx <= player1_select_x[3] and player1_select_y[0] <= my <= player1_select_y[1]:
+                selected_character1 = True
+            if player1_select_x[2] <= mx <= player1_select_x[3] and player1_select_y[0] <= my <= player1_select_y[1]:
                 print("player 1 selected Jondahl")
                 choice_player1 = "Jondahl"
-            elif player1_select_x[4] <= mx <= player1_select_x[5] and player1_select_y[0] <= my <= player1_select_y[1]:
+                selected_character1 = True
+            if player1_select_x[4] <= mx <= player1_select_x[5] and player1_select_y[0] <= my <= player1_select_y[1]:
                 print("player 1 selected Zizou_Olympia")
                 choice_player1 = "Zizou_Olympia"
-            elif player1_select_x[6] <= mx <= player1_select_x[7] and player1_select_y[0] <= my <= player1_select_y[1]:
+                selected_character1 = True
+            if player1_select_x[6] <= mx <= player1_select_x[7] and player1_select_y[0] <= my <= player1_select_y[1]:
                 print("player 1 selected Franzer")
                 choice_player1 = "Franzer"
+                selected_character1 = True
 
             # player 2 캐릭터 선택 로직
             if player2_select_x[0] <= mx <= player2_select_x[1] and player2_select_y[0] <= my <= player2_select_y[1]:
                 print("player 2 selected Al")
                 choice_player2 = "Al"
-            elif player2_select_x[2] <= mx <= player2_select_x[3] and player2_select_y[0] <= my <= player2_select_y[1]:
+                selected_character2 = True
+            if player2_select_x[2] <= mx <= player2_select_x[3] and player2_select_y[0] <= my <= player2_select_y[1]:
                 print("player 2 selected Jondahl")
                 choice_player2 = "Jondahl"
-            elif player2_select_x[4] <= mx <= player2_select_x[5] and player2_select_y[0] <= my <= player2_select_y[1]:
+                selected_character2 = True
+            if player2_select_x[4] <= mx <= player2_select_x[5] and player2_select_y[0] <= my <= player2_select_y[1]:
                 print("player 2 selected Zizou_Olympia")
                 choice_player2 = "Zizou_Olympia"
-            elif player2_select_x[6] <= mx <= player2_select_x[7] and player2_select_y[0] <= my <= player2_select_y[1]:
+                selected_character2 = True
+            if player2_select_x[6] <= mx <= player2_select_x[7] and player2_select_y[0] <= my <= player2_select_y[1]:
                 print("player 2 selected Franzer")
                 choice_player2 = "Franzer"
+                selected_character2 = True
 
 
 
@@ -138,3 +160,14 @@ def draw():
 def pause(): pass
 
 def resume(): pass
+
+Choice_player1 = None
+Choice_player2 = None
+
+def set_choices(p1, p2):
+    global Choice_player1, Choice_player2
+    Choice_player1 = p1
+    Choice_player2 = p2
+
+def get_choices():
+    return Choice_player1, Choice_player2
