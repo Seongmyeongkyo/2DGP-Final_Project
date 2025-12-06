@@ -3,6 +3,7 @@ from pico2d import *
 import game_framework
 import game_world
 
+import Character_Select_Screen
 import player1_character
 import player2_character
 import Play_background
@@ -15,20 +16,6 @@ def handle_events():
 
     event_list = get_events()
 
-    # 숫자키로 플레이어 교체 매핑 (없으면 무시)
-    player1_key_map = {
-        SDLK_1: 'Al',
-        SDLK_2: 'Jondahl',
-        SDLK_3: 'Zizou_Olympia',
-        SDLK_4: 'Franzer',
-    }
-    player2_key_map = {
-        SDLK_6: 'Al',
-        SDLK_7: 'Jondahl',
-        SDLK_8: 'Zizou_Olympia',
-        SDLK_9: 'Franzer',
-    }
-
     for event in event_list:
         if event.type == SDL_QUIT:
             game_framework.quit()
@@ -37,37 +24,6 @@ def handle_events():
         if event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
             game_framework.quit()
             continue
-
-        # 숫자키로 캐릭터 교체 처리 (keydown)
-        if event.type == SDL_KEYDOWN:
-            key = getattr(event, 'key', None)
-
-            if key in player1_key_map:
-                cls_name = player1_key_map[key]
-                cls = getattr(player1_character, cls_name, None)
-                if cls:
-                    # 기존 player1 제거 후 새 객체 추가
-                    try:
-                        if 'player1' in globals():
-                            game_world.remove_object(player1)
-                    except Exception:
-                        pass
-                    player1 = cls()
-                    game_world.add_object(player1, 1)
-                continue
-
-            if key in player2_key_map:
-                cls_name = player2_key_map[key]
-                cls = getattr(player2_character, cls_name, None)
-                if cls:
-                    try:
-                        if 'player2' in globals():
-                            game_world.remove_object(player2)
-                    except Exception:
-                        pass
-                    player2 = cls()
-                    game_world.add_object(player2, 1)
-                continue
 
         # 키 입력은 키 종류에 따라 각 플레이어로 라우팅
         if event.type in (SDL_KEYDOWN, SDL_KEYUP):
@@ -97,10 +53,19 @@ def init():
     background = Play_background.background()
     game_world.add_object(background, 0)
 
-    player1 = player1_character.Al()
+    p1_choice, p2_choice = Character_Select_Screen.get_choices()
+
+    # 기본 캐릭터 설정
+    if p1_choice is None:
+        p1_choice = 'Al'
+    if p2_choice is None:
+        p2_choice = 'Al'
+
+    # 실제 캐릭터 클래스 생성
+    player1 = getattr(player1_character, p1_choice)()
     game_world.add_object(player1, 1)
 
-    player2 = player2_character.Al()
+    player2 = getattr(player2_character, p2_choice)()
     game_world.add_object(player2, 1)
 
     player1_Hp = Hp_Ui.Player1_Hp_Ui()
