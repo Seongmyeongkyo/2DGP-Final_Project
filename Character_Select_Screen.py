@@ -44,12 +44,8 @@ def finish():
     global font, profiles, white_background, choice_player1, choice_player2, selected_character1, selected_character2
     del font, profiles, white_background, choice_player1, choice_player2, selected_character1, selected_character2
     pass
+
 def update():
-    # 양쪽 플레이어가 모두 캐릭터를 선택했을 때 게임 모드로 전환
-    # 양쪽 플레이어가 모두 캐릭터를 선택했을 때 게임 모드로 전환
-    if selected_character1 and selected_character2:
-        set_choices(choice_player1, choice_player2)
-        game_framework.change_mode(play_mode)
     pass
 
 def handle_events():
@@ -72,6 +68,11 @@ def handle_events():
             player1_select_y = [260, 460]
             player2_select_x = [650, 790, 810, 950, 970, 1110, 1130, 1270]
             player2_select_y = [260, 460]
+
+            Game_start_x1 = 1055
+            Game_start_y1 = 0
+            Game_start_x2 = 1255
+            Game_start_y2 = 60
 
 
 
@@ -110,6 +111,11 @@ def handle_events():
                 print("player 2 selected Franzer")
                 choice_player2 = "Franzer"
                 selected_character2 = True
+
+            # 양쪽 플레이어가 모두 캐릭터를 선택했을 때 게임 모드로 전환
+            if selected_character1 and selected_character2 and Game_start_x1 <= mx <= Game_start_x2 and Game_start_y1 <= my <= Game_start_y2:
+                set_choices(choice_player1, choice_player2)
+                game_framework.change_mode(play_mode)
 
 
 
@@ -150,10 +156,12 @@ def draw():
         draw_rectangle(1120, 250, 1280, 470, 255,0,0, 100, True)
         font.draw(1120, 500, 'Selected', (255, 255, 255))
 
+    if selected_character1 and selected_character2:
+        draw_rectangle(1055, 0, 1255, 60, 0,255,0, 100, True)
+        font.draw(1070, 30, 'GameStart', (255, 255, 255))
+
     for p in profiles:
         p.draw()
-
-    # font.draw(705, 550, 'Start Game', (255, 255, 255))
 
     update_canvas()
 
