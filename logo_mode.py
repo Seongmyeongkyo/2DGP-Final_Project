@@ -1,7 +1,7 @@
 import game_framework
 from pico2d import *
 
-import play_mode
+import Character_Select_Screen
 
 
 def init():
@@ -36,7 +36,7 @@ def handle_events():
             left_mouse_areaX_quit, left_mouse_areaY_quit = 700, 300
             right_mouse_areaX_quit, right_mouse_areaY_quit = 1200, 400
             if left_mouse_areaX <= mx <= right_mouse_areaX and left_mouse_areaY <= my <= right_mouse_areaY:
-                game_framework.change_mode(play_mode)
+                game_framework.change_mode(Character_Select_Screen)
             elif left_mouse_areaX_quit <= mx <= right_mouse_areaX_quit and left_mouse_areaY_quit <= my <= right_mouse_areaY_quit:
                 game_framework.quit()
 
