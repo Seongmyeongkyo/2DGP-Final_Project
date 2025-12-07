@@ -69,7 +69,7 @@ class Player2_Mana_Ui:
         if self.mana_regen_time >= self.mana_regen_interval:
             self.mana_regen_time = 0
             self.increase_mana(self.mana_regen_amount)
-        self.x = 1280 - (100 + self.width / 2)  # x 위치 조정
+        self.x = 1280 - 100 - (self.width / 2)  # x 위치 조정
 
     def decrease_mana(self, amount):
         self.mana -= amount
