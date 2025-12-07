@@ -116,10 +116,8 @@ class Al_UltimateSkill:
         draw_x = self.Al.x
         if self.Al.face_dir > 0:
             img.composite_draw(0, 'h', draw_x, draw_y)
-            draw_rectangle(*self.get_bb())
         else:
             img.draw(draw_x, draw_y)
-            draw_rectangle(*self.get_bb())
 
     def get_bb(self):
         img = self.Al.images['Al_UltimateSkill'][int(self.Al.frameX)]
@@ -176,10 +174,8 @@ class Al_NomalSkill:
         draw_x = self.Al.x
         if self.Al.face_dir > 0:
             img.composite_draw(0, 'h', draw_x, draw_y)
-            draw_rectangle(*self.get_bb())
         else:
             img.draw(draw_x, draw_y)
-            draw_rectangle(*self.get_bb())
 
     def get_bb(self):
         img = self.Al.images['Al_NomalSkill'][int(self.Al.frameX)]
@@ -225,10 +221,8 @@ class Al_Attack:
         draw_x = self.Al.x
         if self.Al.face_dir > 0:
             img.composite_draw(0, 'h', draw_x, draw_y)
-            draw_rectangle(*self.get_bb())
         else:
             img.draw(draw_x, draw_y)
-            draw_rectangle(*self.get_bb())
 
     def get_bb(self):
         img = self.Al.images['Al_Attack'][int(self.Al.frameX)]
@@ -280,10 +274,8 @@ class Al_Run:
         draw_x = self.Al.x
         if self.Al.face_dir > 0:
             img.composite_draw(0, 'h', draw_x, draw_y)
-            draw_rectangle(*self.get_bb())
         else:
             img.draw(draw_x, draw_y)
-            draw_rectangle(*self.get_bb())
 
     def get_bb(self):
         img = self.Al.images['Al_Run'][int(self.Al.frameX)]
@@ -323,10 +315,8 @@ class Al_Idle:
         draw_x = self.Al.x
         if self.Al.face_dir > 0:
             img.composite_draw(0, 'h', draw_x, draw_y)
-            draw_rectangle(*self.get_bb())
         else:
             img.draw(draw_x, draw_y)
-            draw_rectangle(*self.get_bb())
 
     def get_bb(self):
         img = self.Al.images['Al_Idle'][int(self.Al.frameX)]
@@ -539,10 +529,8 @@ class Jondahl_UltimateSkill:
         draw_x = self.Jondahl.x
         if self.Jondahl.face_dir > 0:
             img.composite_draw(0, 'h', draw_x, draw_y)
-            draw_rectangle(*self.get_bb())
         else:
             img.draw(draw_x, draw_y)
-            draw_rectangle(*self.get_bb())
 
     def get_bb(self):
         img = self.Jondahl.images['Jondahl_NomalSkill'][int(self.Jondahl.frameX)]
@@ -607,10 +595,8 @@ class Jondahl_NomalSkill:
         draw_x = self.Jondahl.x
         if self.Jondahl.face_dir > 0:
             img.composite_draw(0, 'h', draw_x, draw_y)
-            draw_rectangle(*self.get_bb())
         else:
             img.draw(draw_x, draw_y)
-            draw_rectangle(*self.get_bb())
 
     def get_bb(self):
         img = self.Jondahl.images['Jondahl_NomalSkill'][int(self.Jondahl.frameX)]
@@ -655,10 +641,8 @@ class Jondahl_Attack:
         draw_x = self.Jondahl.x
         if self.Jondahl.face_dir > 0:
             img.composite_draw(0, 'h', draw_x, draw_y)
-            draw_rectangle(*self.get_bb())
         else:
             img.draw(draw_x, draw_y)
-            draw_rectangle(*self.get_bb())
 
     def get_bb(self):
         img = self.Jondahl.images['Jondahl_Attack'][int(self.Jondahl.frameX)]
@@ -708,10 +692,8 @@ class Jondahl_Run:
         draw_x = self.Jondahl.x
         if self.Jondahl.face_dir < 0:
             img.composite_draw(0, 'h', draw_x, draw_y)
-            draw_rectangle(*self.get_bb())
         else:
             img.draw(draw_x, draw_y)
-            draw_rectangle(*self.get_bb())
 
     def get_bb(self):
         img = self.Jondahl.images['Jondahl_Run'][int(self.Jondahl.frameX)]
@@ -748,10 +730,8 @@ class Jondahl_Idle:
         draw_x = self.Jondahl.x
         if self.Jondahl.face_dir > 0:
             img.composite_draw(0, 'h', draw_x, draw_y)
-            draw_rectangle(*self.get_bb())
         else:
             img.draw(draw_x, draw_y)
-            draw_rectangle(*self.get_bb())
 
     def get_bb(self):
         img = self.Jondahl.images['Jondahl_Idle'][int(self.Jondahl.frameX)]
@@ -946,10 +926,8 @@ class Zizou_Olympia_UltimateSkill:
         draw_x = self.Zizou_Olympia.x
         if self.Zizou_Olympia.face_dir > 0:
             img.composite_draw(0, 'h', draw_x, draw_y)
-            draw_rectangle(*self.get_bb())
         else:
             img.draw(draw_x, draw_y)
-            draw_rectangle(*self.get_bb())
 
     def get_bb(self):
         img = self.Zizou_Olympia.images['Zizou Olympia_NomalSkill'][int(self.Zizou_Olympia.frameX)]
@@ -1015,10 +993,8 @@ class Zizou_Olympia_NomalSkill:
         draw_x = self.Zizou_Olympia.x
         if self.Zizou_Olympia.face_dir > 0:
             img.composite_draw(0, 'h', draw_x, draw_y)
-            draw_rectangle(*self.get_bb())
         else:
             img.draw(draw_x, draw_y)
-            draw_rectangle(*self.get_bb())
 
     def get_bb(self):
         img = self.Zizou_Olympia.images['Zizou Olympia_NomalSkill'][int(self.Zizou_Olympia.frameX)]
@@ -1075,10 +1051,8 @@ class Zizou_Olympia_Attack:
         draw_x = self.Zizou_Olympia.x
         if self.Zizou_Olympia.face_dir > 0:
             img.composite_draw(0, 'h', draw_x, draw_y)
-            draw_rectangle(*self.get_bb())
         else:
             img.draw(draw_x, draw_y)
-            draw_rectangle(*self.get_bb())
 
     def get_bb(self):
         img = self.Zizou_Olympia.images['Zizou Olympia_Attack'][0]
@@ -1130,10 +1104,8 @@ class Zizou_Olympia_Run:
         draw_x = self.Zizou_Olympia.x
         if self.Zizou_Olympia.face_dir > 0:
             img.composite_draw(0, 'h', draw_x, draw_y)
-            draw_rectangle(*self.get_bb())
         else:
             img.draw(draw_x, draw_y)
-            draw_rectangle(*self.get_bb())
 
     def get_bb(self):
         img = self.Zizou_Olympia.images['Zizou Olympia_Run'][int(self.Zizou_Olympia.frameX)]
@@ -1172,10 +1144,8 @@ class Zizou_Olympia_Idle:
         draw_x = self.Zizou_Olympia.x
         if self.Zizou_Olympia.face_dir > 0:
             img.composite_draw(0, 'h', draw_x, draw_y)
-            draw_rectangle(*self.get_bb())
         else:
             img.draw(draw_x, draw_y)
-            draw_rectangle(*self.get_bb())
 
     def get_bb(self):
         img = self.Zizou_Olympia.images['Zizou Olympia_Idle'][int(self.Zizou_Olympia.frameX)]
@@ -1389,10 +1359,8 @@ class Franzer_UltimateSkill:
         draw_x = self.Franzer.x
         if self.Franzer.face_dir > 0:
             img.composite_draw(0, 'h', draw_x, draw_y)
-            draw_rectangle(*self.get_bb())
         else:
             img.draw(draw_x, draw_y)
-            draw_rectangle(*self.get_bb())
 
     def get_bb(self):
         img = self.Franzer.images['Franzer_UltimateSkill'][int(self.Franzer.frameX)]
@@ -1447,10 +1415,8 @@ class Franzer_NomalSkill:
         draw_x = self.Franzer.x
         if self.Franzer.face_dir > 0:
             img.composite_draw(0, 'h', draw_x, draw_y)
-            draw_rectangle(*self.get_bb())
         else:
             img.draw(draw_x, draw_y)
-            draw_rectangle(*self.get_bb())
 
     def get_bb(self):
         img = self.Franzer.images['Franzer_NomalSkill'][int(self.Franzer.frameX)]
@@ -1495,10 +1461,8 @@ class Franzer_Attack:
         draw_x = self.Franzer.x
         if self.Franzer.face_dir > 0:
             img.composite_draw(0, 'h', draw_x, draw_y)
-            draw_rectangle(*self.get_bb())
         else:
             img.draw(draw_x, draw_y)
-            draw_rectangle(*self.get_bb())
 
     def get_bb(self):
         img = self.Franzer.images['Franzer_Attack'][int(self.Franzer.frameX)]
@@ -1548,10 +1512,8 @@ class Franzer_Run:
         draw_x = self.Franzer.x
         if self.Franzer.face_dir > 0:
             img.composite_draw(0, 'h', draw_x, draw_y)
-            draw_rectangle(*self.get_bb())
         else:
             img.draw(draw_x, draw_y)
-            draw_rectangle(*self.get_bb())
 
     def get_bb(self):
         img = self.Franzer.images['Franzer_Run'][int(self.Franzer.frameX)]
@@ -1591,10 +1553,8 @@ class Franzer_Idle:
         draw_x = self.Franzer.x
         if self.Franzer.face_dir > 0:
             img.composite_draw(0, 'h', draw_x, draw_y)
-            draw_rectangle(*self.get_bb())
         else:
             img.draw(draw_x, draw_y)
-            draw_rectangle(*self.get_bb())
 
     def get_bb(self):
         img = self.Franzer.images['Franzer_Idle'][int(self.Franzer.frameX)]
