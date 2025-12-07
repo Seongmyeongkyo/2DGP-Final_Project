@@ -64,12 +64,13 @@ def init():
     player1 = getattr(player1_character, p1_choice)()
     game_world.add_object(player1, 1)
     game_world.add_collision_pair('player1:player2', player1, None)
-    game_world.add_collision_pair('player1_skill:player2', player1, None)
 
     player2 = getattr(player2_character, p2_choice)()
     game_world.add_object(player2, 1)
     game_world.add_collision_pair('player1:player2', None, player2)
-    game_world.add_collision_pair('player2_skill:player1', None, player2)
+
+    game_world.add_collision_pair('player2_skill:player1', None, player1)
+    game_world.add_collision_pair('player1_skill:player2', None, player2)
 
     player1_Hp = Hp_Ui.Player1_Hp_Ui()
     game_world.add_object(player1_Hp, 2)
