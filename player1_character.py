@@ -118,10 +118,8 @@ class Al_UltimateSkill:
         draw_x = self.Al.x
         if self.Al.face_dir > 0:
             img.composite_draw(0, 'h', draw_x, draw_y)
-            draw_rectangle(*self.get_bb())
         else:
             img.draw(draw_x, draw_y)
-            draw_rectangle(*self.get_bb())
 
     def get_bb(self):
         img = self.Al.images['Al_UltimateSkill'][int(self.Al.frameX)]
@@ -176,10 +174,8 @@ class Al_NomalSkill:
         draw_x = self.Al.x
         if self.Al.face_dir > 0:
             img.composite_draw(0, 'h', draw_x, draw_y)
-            draw_rectangle(*self.get_bb())
         else:
             img.draw(draw_x, draw_y)
-            draw_rectangle(*self.get_bb())
 
     def get_bb(self):
         img = self.Al.images['Al_NomalSkill'][int(self.Al.frameX)]
@@ -224,10 +220,8 @@ class Al_Attack:
         draw_x = self.Al.x
         if self.Al.face_dir > 0:
             img.composite_draw(0, 'h', draw_x, draw_y)
-            draw_rectangle(*self.get_bb())
         else:
             img.draw(draw_x, draw_y)
-            draw_rectangle(*self.get_bb())
 
     def get_bb(self):
         img = self.Al.images['Al_Attack'][int(self.Al.frameX)]
@@ -278,10 +272,8 @@ class Al_Run:
         draw_x = self.Al.x
         if self.Al.face_dir > 0:
             img.composite_draw(0, 'h', draw_x, draw_y)
-            draw_rectangle(*self.get_bb())
         else:
             img.draw(draw_x, draw_y)
-            draw_rectangle(*self.get_bb())
 
     def get_bb(self):
         img = self.Al.images['Al_Run'][int(self.Al.frameX)]
@@ -320,10 +312,8 @@ class Al_Idle:
         draw_x = self.Al.x
         if self.Al.face_dir > 0:
             img.composite_draw(0, 'h', draw_x, draw_y)
-            draw_rectangle(*self.get_bb())
         else:
             img.draw(draw_x, draw_y)
-            draw_rectangle(*self.get_bb())
 
     def get_bb(self):
         img = self.Al.images['Al_Idle'][int(self.Al.frameX)]
@@ -418,17 +408,23 @@ class Al:
         if self.face_dir > 0:
             al_nomal_skill_attack = Al_Nomal_Skill_Attack(self.x + 160, self.y + self.y / 3, self.face_dir)
             game_world.add_object(al_nomal_skill_attack, 1)
+            # 충돌 pair 등록
+            game_world.add_collision_pair('player1_skill:player2', al_nomal_skill_attack, None)
         else:
             al_nomal_skill_attack = Al_Nomal_Skill_Attack(self.x - 160, self.y + self.y / 3, self.face_dir)
             game_world.add_object(al_nomal_skill_attack, 1)
+            # 충돌 pair 등록
+            game_world.add_collision_pair('player1_skill:player2', al_nomal_skill_attack, None)
 
     def ultimateSkill_attack(self):
         if self.face_dir > 0:
             al_ultimate_skill_attack = Al_Ultimate_Skill_Attack(self.x + 160, self.y, self.face_dir)
             game_world.add_object(al_ultimate_skill_attack, 1)
+            game_world.add_collision_pair('player1_skill:player2', al_ultimate_skill_attack, None)
         else:
             al_ultimate_skill_attack = Al_Ultimate_Skill_Attack(self.x - 160, self.y, self.face_dir)
             game_world.add_object(al_ultimate_skill_attack, 1)
+            game_world.add_collision_pair('player1_skill:player2', al_ultimate_skill_attack, None)
 
     def get_bb(self):
         sm = getattr(self, 'state_machine', None)
@@ -514,10 +510,8 @@ class Jondahl_UltimateSkill:
         draw_x = self.Jondahl.x
         if self.Jondahl.face_dir > 0:
             img.composite_draw(0, 'h', draw_x, draw_y)
-            draw_rectangle(*self.get_bb())
         else:
             img.draw(draw_x, draw_y)
-            draw_rectangle(*self.get_bb())
 
     def get_bb(self):
         img = self.Jondahl.images['Jondahl_NomalSkill'][int(self.Jondahl.frameX)]
@@ -580,10 +574,8 @@ class Jondahl_NomalSkill:
         draw_x = self.Jondahl.x
         if self.Jondahl.face_dir > 0:
             img.composite_draw(0, 'h', draw_x, draw_y)
-            draw_rectangle(*self.get_bb())
         else:
             img.draw(draw_x, draw_y)
-            draw_rectangle(*self.get_bb())
 
     def get_bb(self):
         img = self.Jondahl.images['Jondahl_NomalSkill'][int(self.Jondahl.frameX)]
@@ -627,10 +619,8 @@ class Jondahl_Attack:
         draw_x = self.Jondahl.x
         if self.Jondahl.face_dir > 0:
             img.composite_draw(0, 'h', draw_x, draw_y)
-            draw_rectangle(*self.get_bb())
         else:
             img.draw(draw_x, draw_y)
-            draw_rectangle(*self.get_bb())
 
     def get_bb(self):
         img = self.Jondahl.images['Jondahl_Attack'][int(self.Jondahl.frameX)]
@@ -679,10 +669,8 @@ class Jondahl_Run:
         draw_x = self.Jondahl.x
         if self.Jondahl.face_dir < 0:
             img.composite_draw(0, 'h', draw_x, draw_y)
-            draw_rectangle(*self.get_bb())
         else:
             img.draw(draw_x, draw_y)
-            draw_rectangle(*self.get_bb())
 
     def get_bb(self):
         img = self.Jondahl.images['Jondahl_Run'][int(self.Jondahl.frameX)]
@@ -719,10 +707,8 @@ class Jondahl_Idle:
         draw_x = self.Jondahl.x
         if self.Jondahl.face_dir > 0:
             img.composite_draw(0, 'h', draw_x, draw_y)
-            draw_rectangle(*self.get_bb())
         else:
             img.draw(draw_x, draw_y)
-            draw_rectangle(*self.get_bb())
 
     def get_bb(self):
         img = self.Jondahl.images['Jondahl_Idle'][int(self.Jondahl.frameX)]
@@ -809,9 +795,11 @@ class Jondahl:
         if self.face_dir > 0:
             jondahl_nomal_skill_attack = Jondahl_Nomal_Skill_Attack(self.x + 222, self.y + 40, self.face_dir)
             game_world.add_object(jondahl_nomal_skill_attack, 1)
+            game_world.add_collision_pair('player1_skill:player2', jondahl_nomal_skill_attack, None)
         else:
             jondahl_nomal_skill_attack = Jondahl_Nomal_Skill_Attack(self.x - 222, self.y + 40, self.face_dir)
             game_world.add_object(jondahl_nomal_skill_attack, 1)
+            game_world.add_collision_pair('player1_skill:player2', jondahl_nomal_skill_attack, None)
 
     def get_bb(self):
         sm = getattr(self, 'state_machine', None)
@@ -898,10 +886,8 @@ class Zizou_Olympia_UltimateSkill:
         draw_x = self.Zizou_Olympia.x
         if self.Zizou_Olympia.face_dir > 0:
             img.composite_draw(0, 'h', draw_x, draw_y)
-            draw_rectangle(*self.get_bb())
         else:
             img.draw(draw_x, draw_y)
-            draw_rectangle(*self.get_bb())
 
     def get_bb(self):
         img = self.Zizou_Olympia.images['Zizou Olympia_NomalSkill'][int(self.Zizou_Olympia.frameX)]
@@ -964,10 +950,8 @@ class Zizou_Olympia_NomalSkill:
         draw_x = self.Zizou_Olympia.x
         if self.Zizou_Olympia.face_dir > 0:
             img.composite_draw(0, 'h', draw_x, draw_y)
-            draw_rectangle(*self.get_bb())
         else:
             img.draw(draw_x, draw_y)
-            draw_rectangle(*self.get_bb())
 
     def get_bb(self):
         img = self.Zizou_Olympia.images['Zizou Olympia_NomalSkill'][int(self.Zizou_Olympia.frameX)]
@@ -1023,10 +1007,8 @@ class Zizou_Olympia_Attack:
         draw_x = self.Zizou_Olympia.x
         if self.Zizou_Olympia.face_dir > 0:
             img.composite_draw(0, 'h', draw_x, draw_y)
-            draw_rectangle(*self.get_bb())
         else:
             img.draw(draw_x, draw_y)
-            draw_rectangle(*self.get_bb())
 
     def get_bb(self):
         img = self.Zizou_Olympia.images['Zizou Olympia_Attack'][0]
@@ -1077,10 +1059,8 @@ class Zizou_Olympia_Run:
         draw_x = self.Zizou_Olympia.x
         if self.Zizou_Olympia.face_dir > 0:
             img.composite_draw(0, 'h', draw_x, draw_y)
-            draw_rectangle(*self.get_bb())
         else:
             img.draw(draw_x, draw_y)
-            draw_rectangle(*self.get_bb())
 
     def get_bb(self):
         img = self.Zizou_Olympia.images['Zizou Olympia_Run'][int(self.Zizou_Olympia.frameX)]
@@ -1118,10 +1098,8 @@ class Zizou_Olympia_Idle:
         draw_x = self.Zizou_Olympia.x
         if self.Zizou_Olympia.face_dir > 0:
             img.composite_draw(0, 'h', draw_x, draw_y)
-            draw_rectangle(*self.get_bb())
         else:
             img.draw(draw_x, draw_y)
-            draw_rectangle(*self.get_bb())
 
     def get_bb(self):
         img = self.Zizou_Olympia.images['Zizou Olympia_Idle'][int(self.Zizou_Olympia.frameX)]
@@ -1208,17 +1186,23 @@ class Zizou_Olympia:
         if self.face_dir > 0:
             olympia_attack = Olympia_attack(self.x + 60, self.y, self.face_dir)
             game_world.add_object(olympia_attack, 1)
+            game_world.add_collision_pair('player1_skill:player2', olympia_attack, None)
+
         else:
             olympia_attack = Olympia_attack(self.x - 60, self.y, self.face_dir)
             game_world.add_object(olympia_attack, 1)
+            game_world.add_collision_pair('player1_skill:player2', olympia_attack, None)
+
 
     def nomalSkill_attack(self):
         if self.face_dir > 0:
             zizou_olympia_nomal_skill_attack = Zizou_Olympia_Nomal_Skill_Attack(self.x + 36, self.y, self.face_dir)
             game_world.add_object(zizou_olympia_nomal_skill_attack, 1)
+            game_world.add_collision_pair('player1_skill:player2', zizou_olympia_nomal_skill_attack, None)
         else:
             zizou_olympia_nomal_skill_attack = Zizou_Olympia_Nomal_Skill_Attack(self.x - 36, self.y, self.face_dir)
             game_world.add_object(zizou_olympia_nomal_skill_attack, 1)
+            game_world.add_collision_pair('player1_skill:player2', zizou_olympia_nomal_skill_attack, None)
 
     def get_bb(self):
         sm = getattr(self, 'state_machine', None)
@@ -1318,10 +1302,8 @@ class Franzer_UltimateSkill:
         draw_x = self.Franzer.x
         if self.Franzer.face_dir > 0:
             img.composite_draw(0, 'h', draw_x, draw_y)
-            draw_rectangle(*self.get_bb())
         else:
             img.draw(draw_x, draw_y)
-            draw_rectangle(*self.get_bb())
 
     def get_bb(self):
         img = self.Franzer.images['Franzer_UltimateSkill'][int(self.Franzer.frameX)]
@@ -1374,10 +1356,8 @@ class Franzer_NomalSkill:
         draw_x = self.Franzer.x
         if self.Franzer.face_dir > 0:
             img.composite_draw(0, 'h', draw_x, draw_y)
-            draw_rectangle(*self.get_bb())
         else:
             img.draw(draw_x, draw_y)
-            draw_rectangle(*self.get_bb())
 
     def get_bb(self):
         img = self.Franzer.images['Franzer_NomalSkill'][int(self.Franzer.frameX)]
@@ -1421,10 +1401,8 @@ class Franzer_Attack:
         draw_x = self.Franzer.x
         if self.Franzer.face_dir > 0:
             img.composite_draw(0, 'h', draw_x, draw_y)
-            draw_rectangle(*self.get_bb())
         else:
             img.draw(draw_x, draw_y)
-            draw_rectangle(*self.get_bb())
 
     def get_bb(self):
         img = self.Franzer.images['Franzer_Attack'][int(self.Franzer.frameX)]
@@ -1473,10 +1451,8 @@ class Franzer_Run:
         draw_x = self.Franzer.x
         if self.Franzer.face_dir > 0:
             img.composite_draw(0, 'h', draw_x, draw_y)
-            draw_rectangle(*self.get_bb())
         else:
             img.draw(draw_x, draw_y)
-            draw_rectangle(*self.get_bb())
 
     def get_bb(self):
         img = self.Franzer.images['Franzer_Run'][int(self.Franzer.frameX)]
@@ -1515,10 +1491,8 @@ class Franzer_Idle:
         draw_x = self.Franzer.x
         if self.Franzer.face_dir > 0:
             img.composite_draw(0, 'h', draw_x, draw_y)
-            draw_rectangle(*self.get_bb())
         else:
             img.draw(draw_x, draw_y)
-            draw_rectangle(*self.get_bb())
 
     def get_bb(self):
         img = self.Franzer.images['Franzer_Idle'][int(self.Franzer.frameX)]
@@ -1538,7 +1512,7 @@ class Franzer:
         self.mana = 150
         # 충돌 쿨다운 추가
         self.last_hit_time = 0
-        self.hit_cooldown = 0.5  # 0.5초마다 한 번만 데미지
+        self.hit_cooldown = 1.0 # 0.5초마다 한 번만 데미지
         self.animation_names = ['Franzer_Idle', 'Franzer_Run','Franzer_Attack', 'Franzer_NomalSkill', 'Franzer_UltimateSkill']
         self.images = {}
         # 각 애니메이션별로 최대 프레임 너비/높이를 저장하면 출력 크기를 통일하여 흔들림을 방지할 수 있음
@@ -1607,9 +1581,11 @@ class Franzer:
         if self.face_dir > 0:
             franzer_ultimate_skill_attack = Franzer_Ultimate_Skill_Attack(self.x + 150, self.y + 250, self.face_dir)
             game_world.add_object(franzer_ultimate_skill_attack, 1)
+            game_world.add_collision_pair('player1_skill:player2', franzer_ultimate_skill_attack, None)
         else:
             franzer_ultimate_skill_attack = Franzer_Ultimate_Skill_Attack(self.x - 150, self.y + 250, self.face_dir)
             game_world.add_object(franzer_ultimate_skill_attack, 1)
+            game_world.add_collision_pair('player1_skill:player2', franzer_ultimate_skill_attack, None)
 
     def get_bb(self):
         sm = getattr(self, 'state_machine', None)
