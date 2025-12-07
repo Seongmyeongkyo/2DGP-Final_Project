@@ -18,7 +18,7 @@ class Player1_Hp_Ui:
         self.width -= amount
         if self.width <= 0:
             self.width = 0
-        self.x = self.width / 2 + 50
+        self.x = self.width / 2 + 100
 
     def draw(self):
         self.image.composite_draw(0, 'h', self.x, self.y, self.width, self.height)
@@ -41,7 +41,7 @@ class Player2_Hp_Ui:
         self.width -= amount
         if self.width <= 0:
             self.width = 0
-        self.x = 1280 - (self.width / 2 + 50)
+        self.x = 1280 - (self.width / 2 + 100)
 
     def draw(self):
         self.image.composite_draw(0, 'h', self.x, self.y, self.width, self.height)
