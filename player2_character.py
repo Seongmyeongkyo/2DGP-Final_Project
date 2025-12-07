@@ -88,6 +88,7 @@ class Al_UltimateSkill:
     def exit(self, e):
         self.Al.frameX = 0
         self.Al.skill_triggered = False
+        self.Al.ultimate_skill_used = True
         pass
 
     def do(self):
@@ -338,6 +339,7 @@ class Al:
         # 충돌 쿨다운 추가
         self.last_hit_time = 0
         self.hit_cooldown = 0.5  # 0.5초마다 한 번만 데미지
+        self.ultimate_skill_used = False  # 궁극기 사용 여부
         self.animation_names = ['Al_Idle', 'Al_Run', 'Al_Attack', 'Al_NomalSkill', 'Al_UltimateSkill']
         self.images = {}
         # 각 애니메이션별로 최대 프레임 너비/높이를 저장하면 출력 크기를 통일하여 흔들림을 방지할 수 있음
@@ -394,6 +396,9 @@ class Al:
                 break
 
     def handle_event(self, event):
+        if event.type == SDL_KEYDOWN and event.key == SDLK_p:
+            if self.ultimate_skill_used:
+                return
         if event.type == SDL_KEYDOWN:
             if event.key == SDLK_o:
                 if self.mana < 50:
@@ -502,6 +507,7 @@ class Jondahl_UltimateSkill:
     def exit(self, e):
         self.Jondahl.frameX = 0
         self.Jondahl.skill_triggered = False
+        self.Jondahl.ultimate_skill_used = True
         pass
 
     def do(self):
@@ -753,6 +759,7 @@ class Jondahl:
         # 충돌 쿨다운 추가
         self.last_hit_time = 0
         self.hit_cooldown = 0.5  # 0.5초마다 한 번만 데미지
+        self.ultimate_skill_used = False  # 궁극기 사용 여부
         self.animation_names = ['Jondahl_Idle', 'Jondahl_Run', 'Jondahl_Attack', 'Jondahl_NomalSkill']
         self.images = {}
         self.render_size = {}
@@ -804,6 +811,9 @@ class Jondahl:
                 break
 
     def handle_event(self, event):
+        if event.type == SDL_KEYDOWN and event.key == SDLK_p:
+            if self.ultimate_skill_used:
+                return
         # 들어온 외부 키입력 등을 상태 머신에 전달하기 위해서
         # 튜플화 시킨 후, 전달
         self.state_machine.handle_state_event(('INPUT', event))
@@ -898,6 +908,7 @@ class Zizou_Olympia_UltimateSkill:
     def exit(self, e):
         self.Zizou_Olympia.frameX = 0
         self.Zizou_Olympia.skill_triggered = False
+        self.Zizou_Olympia.ultimate_skill_used = True
         pass
 
     def do(self):
@@ -1167,6 +1178,7 @@ class Zizou_Olympia:
         # 충돌 쿨다운 추가
         self.last_hit_time = 0
         self.hit_cooldown = 0.5  # 0.5초마다 한 번만 데미지
+        self.ultimate_skill_used = False  # 궁극기 사용 여부
         self.animation_names = ['Zizou Olympia_Idle', 'Zizou Olympia_Run', 'Zizou Olympia_Attack', 'Zizou Olympia_NomalSkill']
         self.images = {}
         self.render_size = {}
@@ -1217,6 +1229,9 @@ class Zizou_Olympia:
                 break
 
     def handle_event(self, event):
+        if event.type == SDL_KEYDOWN and event.key == SDLK_p:
+            if self.ultimate_skill_used:
+                return
         # 들어온 외부 키입력 등을 상태 머신에 전달하기 위해서
         # 튜플화 시킨 후, 전달
         self.state_machine.handle_state_event(('INPUT', event))
@@ -1323,6 +1338,7 @@ class Franzer_UltimateSkill:
         self.Franzer.frameX = 0
         self.Franzer.is_moving = True
         self.Franzer.skill_triggered = False
+        self.Franzer.ultimate_skill_used = True
         pass
 
     def do(self):
@@ -1576,6 +1592,7 @@ class Franzer:
         # 충돌 쿨다운 추가
         self.last_hit_time = 0
         self.hit_cooldown = 1.0
+        self.ultimate_skill_used = False  # 궁극기 사용 여부
         self.animation_names = ['Franzer_Idle', 'Franzer_Run', 'Franzer_Attack', 'Franzer_NomalSkill', 'Franzer_UltimateSkill']
         self.images = {}
         # 각 애니메이션별로 최대 프레임 너비/높이를 저장하면 출력 크기를 통일하여 흔들림을 방지할 수 있음
@@ -1629,6 +1646,9 @@ class Franzer:
                 break
 
     def handle_event(self, event):
+        if event.type == SDL_KEYDOWN and event.key == SDLK_p:
+            if self.ultimate_skill_used:
+                return
         # 들어온 외부 키입력 등을 상태 머신에 전달하기 위해서
         # 튜플화 시킨 후, 전달
         self.state_machine.handle_state_event(('INPUT', event))
