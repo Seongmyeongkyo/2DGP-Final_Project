@@ -1,6 +1,7 @@
 from pico2d import *
 import game_world
 import game_framework
+import Hp_Ui
 
 PIXEL_PER_METER = (10.0 / 0.3)  # 10 pixel 30 cm
 RUN_SPEED_KMPH = 30.0  # Km / Hour
@@ -36,6 +37,7 @@ class Zizou_Olympia_Nomal_Skill_Attack:
         self.face_dir = face_dir
         self.right_end_x = x + 300
         self.left_end_x = x - 300
+        self.hit_objects = set()  # 이미 맞은 객체 추적 (중복 데미지 방지)
 
     def draw(self):
         # 원본 크기로 중앙 정렬하여 그려 좌우 흔들림을 제거 (스케일링 없음)
@@ -67,6 +69,26 @@ class Zizou_Olympia_Nomal_Skill_Attack:
             game_world.remove_object(self)
         if self.x < 0 or self.x > 1280:
             game_world.remove_object(self)
+
+    def get_bb(self):
+        img = self.images['Zizou_Olympia_NomalSkill_Attack'][int(self.frameX)]
+        half_w = 18
+        half_h = 18
+        return self.x - half_w, self.y - half_h, self.x + half_w, self.y + half_h
+
+    def handle_collision(self, group, other):
+        if group == 'player1_skill:player2':
+            if other in self.hit_objects:
+                return
+
+            self.hit_objects.add(other)
+
+            # Player2의 HP 감소
+            for obj in game_world.world[2]:
+                if isinstance(obj, Hp_Ui.Player2_Hp_Ui):
+                    obj.decrease_hp(30)
+                    game_world.remove_object(self)  # 발사체 삭제
+                    break
 
 class Zizou_Olympia_Nomal_Skill_Attack2:
     def __init__(self, x = 1280 - 97, y = 70, face_dir = -1):
@@ -95,6 +117,7 @@ class Zizou_Olympia_Nomal_Skill_Attack2:
         self.face_dir = face_dir
         self.right_end_x = x + 300
         self.left_end_x = x - 300
+        self.hit_objects = set()
 
     def draw(self):
         # 원본 크기로 중앙 정렬하여 그려 좌우 흔들림을 제거 (스케일링 없음)
@@ -126,3 +149,22 @@ class Zizou_Olympia_Nomal_Skill_Attack2:
             game_world.remove_object(self)
         if self.x < 0 or self.x > 1280:
             game_world.remove_object(self)
+
+    def get_bb(self):
+        img = self.images['Zizou_Olympia_NomalSkill_Attack'][int(self.frameX)]
+        half_w = 18
+        half_h = 18
+        return self.x - half_w, self.y - half_h, self.x + half_w, self.y + half_h
+
+    def handle_collision(self, group, other):
+        if group == 'player2_skill:player1':
+            if other in self.hit_objects:
+                return
+
+            self.hit_objects.add(other)
+
+            for obj in game_world.world[2]:
+                if isinstance(obj, Hp_Ui.Player1_Hp_Ui):
+                    obj.decrease_hp(30)
+                    game_world.remove_object(self)
+                    break
