@@ -1,6 +1,7 @@
 from pico2d import *
 import game_world
 import game_framework
+import Hp_Ui
 
 PIXEL_PER_METER = (10.0 / 0.3)  # 10 pixel 30 cm
 RUN_SPEED_KMPH = 30.0  # Km / Hour
@@ -36,6 +37,7 @@ class Jondahl_Nomal_Skill_Attack:
         self.face_dir = face_dir
         self.counter = counter
         self.skill_triggered = False
+        self.hit_objects = set()
 
     def draw(self):
         # 원본 크기로 중앙 정렬하여 그려 좌우 흔들림을 제거 (스케일링 없음)
@@ -43,9 +45,10 @@ class Jondahl_Nomal_Skill_Attack:
         draw_x = self.x
         if self.face_dir < 0:
             img.composite_draw(0, 'h', draw_x, self.y, 222, 222)
+            draw_rectangle(*self.get_bb())
         else:
             img.draw(draw_x, self.y, 222, 222)
-
+            draw_rectangle(*self.get_bb())
     def update(self):
         # 애니메이션 길이와 프레임 타임을 소유자에서 가져와 계산
         length = self.frames_per_animation.get('Jondahl_NomalSkill_Attack', 1)
@@ -60,12 +63,32 @@ class Jondahl_Nomal_Skill_Attack:
                 new_x = self.x + (100 * self.face_dir)
                 new_effect = Jondahl_Nomal_Skill_Attack(new_x, self.y, self.face_dir, self.counter - 1)
                 game_world.add_object(new_effect, 1)
+                game_world.add_collision_pair('player1_skill:player2', new_effect, None)
         if self.frameX >= length:
             game_world.remove_object(self)  # 마지막 프레임에서 제거
             self.skill_triggered = True
         # 화면 밖으로 나가면 제거
         if self.x < 0 or self.x > 1280:
             game_world.remove_object(self)
+
+    def get_bb(self):
+        img = self.images['Jondahl_NomalSkill_Attack'][int(self.frameX)]
+        half_w = 111 / 2
+        half_h = 111
+        return self.x - half_w, self.y - half_h, self.x + half_w, self.y + half_h
+
+    def handle_collision(self, group, other):
+        if group == 'player1_skill:player2':
+            if other in self.hit_objects:
+                return
+
+            self.hit_objects.add(other)
+
+            for obj in game_world.world[2]:
+                if isinstance(obj, Hp_Ui.Player2_Hp_Ui):
+                    obj.decrease_hp(10)
+                    game_world.remove_object(self)
+                    break
 
 
 
@@ -96,6 +119,7 @@ class Jondahl_Nomal_Skill_Attack2:
         self.face_dir = face_dir
         self.counter = counter
         self.skill_triggered = False
+        self.hit_objects = set()
 
     def draw(self):
         # 원본 크기로 중앙 정렬하여 그려 좌우 흔들림을 제거 (스케일링 없음)
@@ -103,8 +127,10 @@ class Jondahl_Nomal_Skill_Attack2:
         draw_x = self.x
         if self.face_dir < 0:
             img.composite_draw(0, 'h', draw_x, self.y, 222, 222)
+            draw_rectangle(*self.get_bb())
         else:
             img.draw(draw_x, self.y, 222, 222)
+            draw_rectangle(*self.get_bb())
 
     def update(self):
         # 애니메이션 길이와 프레임 타임을 소유자에서 가져와 계산
@@ -118,11 +144,31 @@ class Jondahl_Nomal_Skill_Attack2:
         if not self.skill_triggered and int(self.frameX) == 4:
             if self.counter and self.counter > 0:
                 new_x = self.x + (100 * self.face_dir)
-                new_effect = Jondahl_Nomal_Skill_Attack(new_x, self.y, self.face_dir, self.counter - 1)
+                new_effect = Jondahl_Nomal_Skill_Attack2(new_x, self.y, self.face_dir, self.counter - 1)
                 game_world.add_object(new_effect, 1)
+                game_world.add_collision_pair('player2_skill:player1', new_effect, None)
         if self.frameX >= length:
             game_world.remove_object(self)  # 마지막 프레임에서 제거
             self.skill_triggered = True
         # 화면 밖으로 나가면 제거
         if self.x < 0 or self.x > 1280:
             game_world.remove_object(self)
+
+    def get_bb(self):
+        img = self.images['Jondahl_NomalSkill_Attack'][int(self.frameX)]
+        half_w = 111 / 2
+        half_h = 111
+        return self.x - half_w, self.y - half_h, self.x + half_w, self.y + half_h
+
+    def handle_collision(self, group, other):
+        if group == 'player2_skill:player1':
+            if other in self.hit_objects:
+                return
+
+            self.hit_objects.add(other)
+
+            for obj in game_world.world[2]:
+                if isinstance(obj, Hp_Ui.Player1_Hp_Ui):
+                    obj.decrease_hp(10)
+                    game_world.remove_object(self)
+                    break
