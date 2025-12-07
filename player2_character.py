@@ -26,6 +26,9 @@ from jondahl_profile import Jondahl_profile2
 from zizou_olympia_profile import Zizou_Olympia_profile2
 from franzer_profile import Franzer_profile2
 
+import Hp_Ui
+import time
+
 # 이벤트를 체크하는 함수들을 구현
 # e = state_event
 
@@ -336,6 +339,9 @@ class Al:
         self.dir = 1
         self.max_mana = 150
         self.mana = 150
+        # 충돌 쿨다운 추가
+        self.last_hit_time = 0
+        self.hit_cooldown = 0.5  # 0.5초마다 한 번만 데미지
         self.animation_names = ['Al_Idle', 'Al_Run', 'Al_Attack', 'Al_NomalSkill', 'Al_UltimateSkill']
         self.images = {}
         # 각 애니메이션별로 최대 프레임 너비/높이를 저장하면 출력 크기를 통일하여 흔들림을 방지할 수 있음
@@ -408,6 +414,61 @@ class Al:
         else:
             al_ultimate_skill_attack = Al_Ultimate_Skill_Attack2(self.x - 160, self.y, self.face_dir)
             game_world.add_object(al_ultimate_skill_attack, 1)
+
+    def get_bb(self):
+        # 상태 머신에서 현재 상태 객체를 찾아서 위임 시도
+        sm = getattr(self, 'state_machine', None)
+        if sm:
+            for attr in ('current_state', 'cur_state', 'state', 'now_state', 'current', '_state'):
+                state_obj = getattr(sm, attr, None)
+                if state_obj and hasattr(state_obj, 'get_bb'):
+                    try:
+                        return state_obj.get_bb()
+                    except Exception:
+                        pass
+            # 상태 머신 내부에 있는 어떤 속성이라도 get_bb를 제공하면 사용
+            for v in vars(sm).values():
+                if hasattr(v, 'get_bb'):
+                    try:
+                        return v.get_bb()
+                    except Exception:
+                        pass
+
+        # 폴백: 렌더 사이즈 정보가 있으면 그 크기를 사용
+        for name in getattr(self, 'animation_names', []):
+            size = self.render_size.get(name)
+            if size:
+                w, h = size
+                half = w / 2
+                return (self.x - half, 100, self.x + half, 100 + h)
+
+        # 최종 폴백 박스
+        return (self.x - 25, 100, self.x + 25, 140)
+
+    def handle_collision(self, group, other):
+        """충돌 처리"""
+        if group == 'player1:player2':
+            # 쿨다운 체크
+            current_time = time.time()
+            if current_time - self.last_hit_time < self.hit_cooldown:
+                return  # 쿨다운 중이면 무시
+
+            sm = getattr(self, 'state_machine', None)
+            if sm and hasattr(sm, 'cur_state'):
+                state_name = sm.cur_state.__class__.__name__
+
+                if 'Attack' in state_name or 'Skill' in state_name:
+                    # Player1의 HP 감소
+                    for obj in game_world.world[2]:
+                        if isinstance(obj, Hp_Ui.Player1_Hp_Ui):
+                            damage = 10
+                            if 'UltimateSkill' in state_name:
+                                damage = 30
+                            elif 'NomalSkill' in state_name:
+                                damage = 20
+                            obj.decrease_hp(damage)
+                            self.last_hit_time = current_time  # 쿨다운 시작
+                            break
 
 
 # 두 번째 캐릭터 구현
@@ -683,6 +744,9 @@ class Jondahl:
         self.dir = -1
         self.max_mana = 150
         self.mana = 150
+        # 충돌 쿨다운 추가
+        self.last_hit_time = 0
+        self.hit_cooldown = 0.5  # 0.5초마다 한 번만 데미지
         self.animation_names = ['Jondahl_Idle', 'Jondahl_Run', 'Jondahl_Attack', 'Jondahl_NomalSkill']
         self.images = {}
         self.render_size = {}
@@ -743,6 +807,61 @@ class Jondahl:
         else:
             jondahl_nomal_skill_attack = Jondahl_Nomal_Skill_Attack2(self.x - 222, self.y + 40, self.face_dir)
             game_world.add_object(jondahl_nomal_skill_attack, 1)
+
+    def get_bb(self):
+        # 상태 머신에서 현재 상태 객체를 찾아서 위임 시도
+        sm = getattr(self, 'state_machine', None)
+        if sm:
+            for attr in ('current_state', 'cur_state', 'state', 'now_state', 'current', '_state'):
+                state_obj = getattr(sm, attr, None)
+                if state_obj and hasattr(state_obj, 'get_bb'):
+                    try:
+                        return state_obj.get_bb()
+                    except Exception:
+                        pass
+            # 상태 머신 내부에 있는 어떤 속성이라도 get_bb를 제공하면 사용
+            for v in vars(sm).values():
+                if hasattr(v, 'get_bb'):
+                    try:
+                        return v.get_bb()
+                    except Exception:
+                        pass
+
+        # 폴백: 렌더 사이즈 정보가 있으면 그 크기를 사용
+        for name in getattr(self, 'animation_names', []):
+            size = self.render_size.get(name)
+            if size:
+                w, h = size
+                half = w / 2
+                return (self.x - half, 100, self.x + half, 100 + h)
+
+        # 최종 폴백 박스
+        return (self.x - 25, 100, self.x + 25, 140)
+
+    def handle_collision(self, group, other):
+        """충돌 처리"""
+        if group == 'player1:player2':
+            # 쿨다운 체크
+            current_time = time.time()
+            if current_time - self.last_hit_time < self.hit_cooldown:
+                return  # 쿨다운 중이면 무시
+
+            sm = getattr(self, 'state_machine', None)
+            if sm and hasattr(sm, 'cur_state'):
+                state_name = sm.cur_state.__class__.__name__
+
+                if 'Attack' in state_name or 'Skill' in state_name:
+                    # Player1의 HP 감소
+                    for obj in game_world.world[2]:
+                        if isinstance(obj, Hp_Ui.Player1_Hp_Ui):
+                            damage = 10
+                            if 'UltimateSkill' in state_name:
+                                damage = 30
+                            elif 'NomalSkill' in state_name:
+                                damage = 20
+                            obj.decrease_hp(damage)
+                            self.last_hit_time = current_time  # 쿨다운 시작
+                            break
 
 
 # 세 번째 캐릭터 구현
@@ -1036,6 +1155,9 @@ class Zizou_Olympia:
         self.dir = -1
         self.max_mana = 150
         self.mana = 150
+        # 충돌 쿨다운 추가
+        self.last_hit_time = 0
+        self.hit_cooldown = 0.5  # 0.5초마다 한 번만 데미지
         self.animation_names = ['Zizou Olympia_Idle', 'Zizou Olympia_Run', 'Zizou Olympia_Attack', 'Zizou Olympia_NomalSkill']
         self.images = {}
         self.render_size = {}
@@ -1104,6 +1226,60 @@ class Zizou_Olympia:
             zizou_olympia_nomal_skill_attack = Zizou_Olympia_Nomal_Skill_Attack2(self.x - 36, self.y, self.face_dir)
             game_world.add_object(zizou_olympia_nomal_skill_attack, 1)
 
+    def get_bb(self):
+        # 상태 머신에서 현재 상태 객체를 찾아서 위임 시도
+        sm = getattr(self, 'state_machine', None)
+        if sm:
+            for attr in ('current_state', 'cur_state', 'state', 'now_state', 'current', '_state'):
+                state_obj = getattr(sm, attr, None)
+                if state_obj and hasattr(state_obj, 'get_bb'):
+                    try:
+                        return state_obj.get_bb()
+                    except Exception:
+                        pass
+            # 상태 머신 내부에 있는 어떤 속성이라도 get_bb를 제공하면 사용
+            for v in vars(sm).values():
+                if hasattr(v, 'get_bb'):
+                    try:
+                        return v.get_bb()
+                    except Exception:
+                        pass
+
+        # 폴백: 렌더 사이즈 정보가 있으면 그 크기를 사용
+        for name in getattr(self, 'animation_names', []):
+            size = self.render_size.get(name)
+            if size:
+                w, h = size
+                half = w / 2
+                return (self.x - half, 100, self.x + half, 100 + h)
+
+        # 최종 폴백 박스
+        return (self.x - 25, 100, self.x + 25, 140)
+
+    def handle_collision(self, group, other):
+        """충돌 처리"""
+        if group == 'player1:player2':
+            # 쿨다운 체크
+            current_time = time.time()
+            if current_time - self.last_hit_time < self.hit_cooldown:
+                return  # 쿨다운 중이면 무시
+
+            sm = getattr(self, 'state_machine', None)
+            if sm and hasattr(sm, 'cur_state'):
+                state_name = sm.cur_state.__class__.__name__
+
+                if 'Attack' in state_name or 'Skill' in state_name:
+                    # Player1의 HP 감소
+                    for obj in game_world.world[2]:
+                        if isinstance(obj, Hp_Ui.Player1_Hp_Ui):
+                            damage = 10
+                            if 'UltimateSkill' in state_name:
+                                damage = 30
+                            elif 'NomalSkill' in state_name:
+                                damage = 20
+                            obj.decrease_hp(damage)
+                            self.last_hit_time = current_time  # 쿨다운 시작
+                            break
 
 # 네 번째 캐릭터 구현
 class Franzer_UltimateSkill:
@@ -1383,6 +1559,9 @@ class Franzer:
         self.dir = 1
         self.max_mana = 150
         self.mana = 150
+        # 충돌 쿨다운 추가
+        self.last_hit_time = 0
+        self.hit_cooldown = 0.5  # 0.5초마다 한 번만 데미지
         self.animation_names = ['Franzer_Idle', 'Franzer_Run', 'Franzer_Attack', 'Franzer_NomalSkill', 'Franzer_UltimateSkill']
         self.images = {}
         # 각 애니메이션별로 최대 프레임 너비/높이를 저장하면 출력 크기를 통일하여 흔들림을 방지할 수 있음
@@ -1445,3 +1624,58 @@ class Franzer:
         else:
             franzer_ultimate_skill_attack = Franzer_Ultimate_Skill_Attack2(self.x - 150, self.y + 250, self.face_dir)
             game_world.add_object(franzer_ultimate_skill_attack, 1)
+
+    def get_bb(self):
+        # 상태 머신에서 현재 상태 객체를 찾아서 위임 시도
+        sm = getattr(self, 'state_machine', None)
+        if sm:
+            for attr in ('current_state', 'cur_state', 'state', 'now_state', 'current', '_state'):
+                state_obj = getattr(sm, attr, None)
+                if state_obj and hasattr(state_obj, 'get_bb'):
+                    try:
+                        return state_obj.get_bb()
+                    except Exception:
+                        pass
+            # 상태 머신 내부에 있는 어떤 속성이라도 get_bb를 제공하면 사용
+            for v in vars(sm).values():
+                if hasattr(v, 'get_bb'):
+                    try:
+                        return v.get_bb()
+                    except Exception:
+                        pass
+
+        # 폴백: 렌더 사이즈 정보가 있으면 그 크기를 사용
+        for name in getattr(self, 'animation_names', []):
+            size = self.render_size.get(name)
+            if size:
+                w, h = size
+                half = w / 2
+                return (self.x - half, 100, self.x + half, 100 + h)
+
+        # 최종 폴백 박스
+        return (self.x - 25, 100, self.x + 25, 140)
+
+    def handle_collision(self, group, other):
+        """충돌 처리"""
+        if group == 'player1:player2':
+            # 쿨다운 체크
+            current_time = time.time()
+            if current_time - self.last_hit_time < self.hit_cooldown:
+                return  # 쿨다운 중이면 무시
+
+            sm = getattr(self, 'state_machine', None)
+            if sm and hasattr(sm, 'cur_state'):
+                state_name = sm.cur_state.__class__.__name__
+
+                if 'Attack' in state_name or 'Skill' in state_name:
+                    # Player1의 HP 감소
+                    for obj in game_world.world[2]:
+                        if isinstance(obj, Hp_Ui.Player1_Hp_Ui):
+                            damage = 10
+                            if 'UltimateSkill' in state_name:
+                                damage = 30
+                            elif 'NomalSkill' in state_name:
+                                damage = 20
+                            obj.decrease_hp(damage)
+                            self.last_hit_time = current_time  # 쿨다운 시작
+                            break
