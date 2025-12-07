@@ -44,11 +44,9 @@ class Franzer_Ultimate_Skill_Attack:
         draw_y = self.y
         if self.face_dir < 0:
             img.composite_draw(45, 'h', draw_x, draw_y)
-            draw_rectangle(*self.get_bb())
 
         else:
             img.composite_draw(-45, ' ', draw_x, draw_y)
-            draw_rectangle(*self.get_bb())
 
     def update(self):
         length = self.frames_per_animation.get('Franzer_UltimateSkill_Attack', 1)
@@ -143,11 +141,9 @@ class Franzer_Ultimate_Skill_Attack2:
         draw_y = self.y
         if self.face_dir < 0:
             img.composite_draw(45, 'h', draw_x, draw_y)
-            draw_rectangle(*self.get_bb())
 
         else:
             img.composite_draw(-45, ' ', draw_x, draw_y)
-            draw_rectangle(*self.get_bb())
 
     def update(self):
         length = self.frames_per_animation.get('Franzer_UltimateSkill_Attack', 1)
