@@ -420,17 +420,21 @@ class Al:
         if self.face_dir > 0:
             al_nomal_skill_attack = Al_Nomal_Skill_Attack2(self.x + 160, self.y + self.y / 3, self.face_dir)
             game_world.add_object(al_nomal_skill_attack, 1)
+            game_world.add_collision_pair('player2_skill:player1', al_nomal_skill_attack, None)
         else:
             al_nomal_skill_attack = Al_Nomal_Skill_Attack2(self.x - 160, self.y + self.y / 3, self.face_dir)
             game_world.add_object(al_nomal_skill_attack, 1)
+            game_world.add_collision_pair('player2_skill:player1', al_nomal_skill_attack, None)
 
     def ultimateSkill_attack(self):
         if self.face_dir > 0:
             al_ultimate_skill_attack = Al_Ultimate_Skill_Attack2(self.x + 160, self.y, self.face_dir)
             game_world.add_object(al_ultimate_skill_attack, 1)
+            game_world.add_collision_pair('player2_skill:player1', al_ultimate_skill_attack, None)
         else:
             al_ultimate_skill_attack = Al_Ultimate_Skill_Attack2(self.x - 160, self.y, self.face_dir)
             game_world.add_object(al_ultimate_skill_attack, 1)
+            game_world.add_collision_pair('player2_skill:player1', al_ultimate_skill_attack, None)
 
     def get_bb(self):
         # 상태 머신에서 현재 상태 객체를 찾아서 위임 시도
@@ -832,9 +836,11 @@ class Jondahl:
         if self.face_dir > 0:
             jondahl_nomal_skill_attack = Jondahl_Nomal_Skill_Attack2(self.x + 222, self.y + 40, self.face_dir)
             game_world.add_object(jondahl_nomal_skill_attack, 1)
+            game_world.add_collision_pair('player2_skill:player1', jondahl_nomal_skill_attack, None)
         else:
             jondahl_nomal_skill_attack = Jondahl_Nomal_Skill_Attack2(self.x - 222, self.y + 40, self.face_dir)
             game_world.add_object(jondahl_nomal_skill_attack, 1)
+            game_world.add_collision_pair('player2_skill:player1', jondahl_nomal_skill_attack, None)
 
     def get_bb(self):
         # 상태 머신에서 현재 상태 객체를 찾아서 위임 시도
@@ -1253,17 +1259,21 @@ class Zizou_Olympia:
         if self.face_dir < 0:
             olympia_attack = Olympia_attack2(self.x - 60, self.y, self.face_dir)
             game_world.add_object(olympia_attack, 1)
+            game_world.add_collision_pair('player2_skill:player1', olympia_attack, None)
         else:
             olympia_attack = Olympia_attack2(self.x + 60, self.y, self.face_dir)
             game_world.add_object(olympia_attack, 1)
+            game_world.add_collision_pair('player2_skill:player1', olympia_attack, None)
 
     def nomalSkill_attack(self):
         if self.face_dir > 0:
             zizou_olympia_nomal_skill_attack = Zizou_Olympia_Nomal_Skill_Attack2(self.x + 36, self.y, self.face_dir)
             game_world.add_object(zizou_olympia_nomal_skill_attack, 1)
+            game_world.add_collision_pair('player2_skill:player1', zizou_olympia_nomal_skill_attack, None)
         else:
             zizou_olympia_nomal_skill_attack = Zizou_Olympia_Nomal_Skill_Attack2(self.x - 36, self.y, self.face_dir)
             game_world.add_object(zizou_olympia_nomal_skill_attack, 1)
+            game_world.add_collision_pair('player2_skill:player1', zizou_olympia_nomal_skill_attack, None)
 
     def get_bb(self):
         # 상태 머신에서 현재 상태 객체를 찾아서 위임 시도
@@ -1671,9 +1681,11 @@ class Franzer:
         if self.face_dir > 0:
             franzer_ultimate_skill_attack = Franzer_Ultimate_Skill_Attack2(self.x + 150, self.y + 250, self.face_dir)
             game_world.add_object(franzer_ultimate_skill_attack, 1)
+            game_world.add_collision_pair('player2_skill:player1', franzer_ultimate_skill_attack, None)
         else:
             franzer_ultimate_skill_attack = Franzer_Ultimate_Skill_Attack2(self.x - 150, self.y + 250, self.face_dir)
             game_world.add_object(franzer_ultimate_skill_attack, 1)
+            game_world.add_collision_pair('player2_skill:player1', franzer_ultimate_skill_attack, None)
 
     def get_bb(self):
         # 상태 머신에서 현재 상태 객체를 찾아서 위임 시도
