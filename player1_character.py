@@ -29,6 +29,7 @@ from franzer_profile import Franzer_profile
 import player2_character
 import Hp_Ui
 import time
+import Mana_Ui
 
 # 이벤트를 체크하는 함수들을 구현
 # e = state_event
@@ -146,7 +147,11 @@ class Al_NomalSkill:
         self.Al.frameX = 0
         if self.Al.mana >= 50:
             self.Al.mana -= 50
-        pass
+            # Mana UI 업데이트
+            for obj in game_world.world[2]:
+                if isinstance(obj, Mana_Ui.Player1_Mana_Ui):
+                    obj.decrease_mana(50)
+                    break
 
     def do(self):
         if self.Al.mana < 50:
@@ -391,6 +396,14 @@ class Al:
 
     def update(self):
         self.state_machine.update()
+        # Mana UI와 동기화
+        for obj in game_world.world[2]:
+            if isinstance(obj, Mana_Ui.Player1_Mana_Ui):
+                # UI의 마나를 캐릭터의 마나로 동기화
+                if obj.mana != self.mana:
+                    # UI의 마나를 캐릭터에 반영
+                    self.mana = obj.mana
+                break
 
     def handle_event(self, event):
         # 들어온 외부 키입력 등을 상태 머신에 전달하기 위해서
@@ -533,6 +546,11 @@ class Jondahl_NomalSkill:
         self.Jondahl.skill_triggered = False
         if self.Jondahl.mana >= 50:
             self.Jondahl.mana -= 50
+            # Mana UI 업데이트
+            for obj in game_world.world[2]:
+                if isinstance(obj, Mana_Ui.Player1_Mana_Ui):
+                    obj.decrease_mana(50)
+                    break
 
     def do(self):
         if self.Jondahl.mana < 50:
@@ -769,6 +787,14 @@ class Jondahl:
 
     def update(self):
         self.state_machine.update()
+        # Mana UI와 동기화
+        for obj in game_world.world[2]:
+            if isinstance(obj, Mana_Ui.Player1_Mana_Ui):
+                # UI의 마나를 캐릭터의 마나로 동기화
+                if obj.mana != self.mana:
+                    # UI의 마나를 캐릭터에 반영
+                    self.mana = obj.mana
+                break
 
     def handle_event(self, event):
         # 들어온 외부 키입력 등을 상태 머신에 전달하기 위해서
@@ -903,6 +929,11 @@ class Zizou_Olympia_NomalSkill:
         self.Zizou_Olympia.skill_triggered = False
         if self.Zizou_Olympia.mana >= 50:
             self.Zizou_Olympia.mana -= 50
+            # Mana UI 업데이트
+            for obj in game_world.world[2]:
+                if isinstance(obj, Mana_Ui.Player1_Mana_Ui):
+                    obj.decrease_mana(50)
+                    break
 
     def do(self):
         if self.Zizou_Olympia.mana < 50:
@@ -1155,6 +1186,14 @@ class Zizou_Olympia:
 
     def update(self):
         self.state_machine.update()
+        # Mana UI와 동기화
+        for obj in game_world.world[2]:
+            if isinstance(obj, Mana_Ui.Player1_Mana_Ui):
+                # UI의 마나를 캐릭터의 마나로 동기화
+                if obj.mana != self.mana:
+                    # UI의 마나를 캐릭터에 반영
+                    self.mana = obj.mana
+                break
 
     def handle_event(self, event):
         # 들어온 외부 키입력 등을 상태 머신에 전달하기 위해서
@@ -1307,7 +1346,11 @@ class Franzer_NomalSkill:
         self.Franzer.frameX = 0
         if self.Franzer.mana >= 50:
             self.Franzer.mana -= 50
-        pass
+            # Mana UI 업데이트
+            for obj in game_world.world[2]:
+                if isinstance(obj, Mana_Ui.Player1_Mana_Ui):
+                    obj.decrease_mana(50)
+                    break
 
     def do(self):
         if self.Franzer.mana < 50:
@@ -1542,6 +1585,14 @@ class Franzer:
 
     def update(self):
         self.state_machine.update()
+        # Mana UI와 동기화
+        for obj in game_world.world[2]:
+            if isinstance(obj, Mana_Ui.Player1_Mana_Ui):
+                # UI의 마나를 캐릭터의 마나로 동기화
+                if obj.mana != self.mana:
+                    # UI의 마나를 캐릭터에 반영
+                    self.mana = obj.mana
+                break
 
     def handle_event(self, event):
         # 들어온 외부 키입력 등을 상태 머신에 전달하기 위해서
