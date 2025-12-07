@@ -1,6 +1,7 @@
 from pico2d import *
 import game_world
 import game_framework
+import Hp_Ui
 
 PIXEL_PER_METER = (10.0 / 0.15)  # 10 pixel 30 cm
 RUN_SPEED_KMPH = 30.0  # Km / Hour
@@ -34,6 +35,7 @@ class Al_Ultimate_Skill_Attack:
 
         self.x, self.y = x, y
         self.face_dir = face_dir
+        self.hit_objects = set()
 
     def draw(self):
         # 원본 크기로 중앙 정렬하여 그려 좌우 흔들림을 제거 (스케일링 없음)
@@ -63,6 +65,25 @@ class Al_Ultimate_Skill_Attack:
         # 화면 밖으로 나가면 제거
         if self.x < 0 or self.x > 1280:
             game_world.remove_object(self)
+
+    def get_bb(self):
+        img = self.images['Al_UltimateSkill_Attack'][int(self.frameX)]
+        draw_x = self.x
+        draw_y = self.y / 1.5 + img.h * 2
+        half_width = (img.w * 5) / 2
+        half_height = (img.h * 5) / 2
+        return (draw_x - half_width, draw_y - half_height, draw_x + half_width, draw_y + half_height)
+
+    def handle_collision(self, group, other):
+        if group == 'player1_skill:player2':
+            if other in self.hit_objects:
+                return
+            self.hit_objects.add(other)
+
+            for obj in game_world.world[2]:
+                if isinstance(obj, Hp_Ui.Player2_Hp_Ui):
+                    obj.decrease_hp(100)
+                    break
 
 class Al_Ultimate_Skill_Attack2:
     def __init__(self, x = 1280 - 97, y = 70, face_dir = -1):
@@ -89,6 +110,7 @@ class Al_Ultimate_Skill_Attack2:
 
         self.x, self.y = x, y
         self.face_dir = face_dir
+        self.hit_objects = set()
 
     def draw(self):
         # 원본 크기로 중앙 정렬하여 그려 좌우 흔들림을 제거 (스케일링 없음)
@@ -117,3 +139,22 @@ class Al_Ultimate_Skill_Attack2:
         # 화면 밖으로 나가면 제거
         if self.x < 0 or self.x > 1280:
             game_world.remove_object(self)
+
+    def get_bb(self):
+        img = self.images['Al_UltimateSkill_Attack'][int(self.frameX)]
+        draw_x = self.x
+        draw_y = self.y / 1.5 + img.h * 2
+        half_width = (img.w * 5) / 2
+        half_height = (img.h * 5) / 2
+        return (draw_x - half_width, draw_y - half_height, draw_x + half_width, draw_y + half_height)
+
+    def handle_collision(self, group, other):
+        if group == 'player2_skill:player1':
+            if other in self.hit_objects:
+                return
+            self.hit_objects.add(other)
+
+            for obj in game_world.world[2]:
+                if isinstance(obj, Hp_Ui.Player1_Hp_Ui):
+                    obj.decrease_hp(100)
+                    break
