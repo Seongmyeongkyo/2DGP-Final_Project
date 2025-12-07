@@ -1615,7 +1615,7 @@ class Franzer:
         self.mana = 150
         # 충돌 쿨다운 추가
         self.last_hit_time = 0
-        self.hit_cooldown = 0.5  # 0.5초마다 한 번만 데미지
+        self.hit_cooldown = 1.0
         self.animation_names = ['Franzer_Idle', 'Franzer_Run', 'Franzer_Attack', 'Franzer_NomalSkill', 'Franzer_UltimateSkill']
         self.images = {}
         # 각 애니메이션별로 최대 프레임 너비/높이를 저장하면 출력 크기를 통일하여 흔들림을 방지할 수 있음
