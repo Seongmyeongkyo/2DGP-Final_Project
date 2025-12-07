@@ -395,8 +395,19 @@ class Al:
 
     def update(self):
         self.state_machine.update()
+        # Mana UI와 동기화 (선택사항)
+        for obj in game_world.world[2]:
+            if isinstance(obj, Mana_Ui.Player2_Mana_Ui):
+                # UI의 마나를 캐릭터의 마나로 동기화
+                if obj.mana != self.mana:
+                    self.mana = obj.mana
+                break
 
     def handle_event(self, event):
+        if event.type == SDL_KEYDOWN:
+            if event.key == SDLK_o:
+                if self.mana < 50:
+                    return  # 마나가 부족하면 무시
         # 들어온 외부 키입력 등을 상태 머신에 전달하기 위해서
         # 튜플화 시킨 후, 전달
         self.state_machine.handle_state_event(('INPUT', event))
@@ -801,6 +812,12 @@ class Jondahl:
 
     def update(self):
         self.state_machine.update()
+        # Mana UI와 동기화
+        for obj in game_world.world[2]:
+            if isinstance(obj, Mana_Ui.Player2_Mana_Ui):
+                if obj.mana != self.mana:
+                    self.mana = obj.mana
+                break
 
     def handle_event(self, event):
         # 들어온 외부 키입력 등을 상태 머신에 전달하기 위해서
@@ -1216,6 +1233,12 @@ class Zizou_Olympia:
 
     def update(self):
         self.state_machine.update()
+        # Mana UI와 동기화
+        for obj in game_world.world[2]:
+            if isinstance(obj, Mana_Ui.Player2_Mana_Ui):
+                if obj.mana != self.mana:
+                    self.mana = obj.mana
+                break
 
     def handle_event(self, event):
         # 들어온 외부 키입력 등을 상태 머신에 전달하기 위해서
@@ -1628,6 +1651,12 @@ class Franzer:
 
     def update(self):
         self.state_machine.update()
+        # Mana UI와 동기화
+        for obj in game_world.world[2]:
+            if isinstance(obj, Mana_Ui.Player2_Mana_Ui):
+                if obj.mana != self.mana:
+                    self.mana = obj.mana
+                break
 
     def handle_event(self, event):
         # 들어온 외부 키입력 등을 상태 머신에 전달하기 위해서
