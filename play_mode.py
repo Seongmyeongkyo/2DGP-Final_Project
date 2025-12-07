@@ -32,11 +32,10 @@ def handle_events():
             if key in (SDLK_w, SDLK_a, SDLK_s, SDLK_d):
                 if 'player1' in globals() and hasattr(player1, 'handle_event'):
                     player1.handle_event(event)
-                continue
-            if key in (SDLK_i, SDLK_k, SDLK_j, SDLK_l):
+                    continue
                 if 'player2' in globals() and hasattr(player2, 'handle_event'):
                     player2.handle_event(event)
-                continue
+                    continue
 
         # 그 외 이벤트(마우스 등)는 필요에 따라 모두에게 전달
         if 'player1' in globals() and hasattr(player1, 'handle_event'):
@@ -64,9 +63,11 @@ def init():
     # 실제 캐릭터 클래스 생성
     player1 = getattr(player1_character, p1_choice)()
     game_world.add_object(player1, 1)
+    game_world.add_collision_pair('player1:player2', player1, None)
 
     player2 = getattr(player2_character, p2_choice)()
     game_world.add_object(player2, 1)
+    game_world.add_collision_pair('player1:player2', None, player2)
 
     player1_Hp = Hp_Ui.Player1_Hp_Ui()
     game_world.add_object(player1_Hp, 2)
