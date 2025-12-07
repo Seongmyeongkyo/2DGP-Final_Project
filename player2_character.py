@@ -28,6 +28,7 @@ from franzer_profile import Franzer_profile2
 
 import Hp_Ui
 import time
+import Mana_Ui
 
 # 이벤트를 체크하는 함수들을 구현
 # e = state_event
@@ -146,6 +147,11 @@ class Al_NomalSkill:
         self.Al.frameX = 0
         if self.Al.mana >= 50:
             self.Al.mana -= 50
+            # Mana UI 업데이트
+            for obj in game_world.world[2]:
+                if isinstance(obj, Mana_Ui.Player2_Mana_Ui):
+                    obj.decrease_mana(50)
+                    break
 
     def do(self):
         if self.Al.mana < 50:
@@ -551,6 +557,11 @@ class Jondahl_NomalSkill:
         self.Jondahl.skill_triggered = False
         if self.Jondahl.mana >= 50:
             self.Jondahl.mana -= 50
+            # Mana UI 업데이트
+            for obj in game_world.world[2]:
+                if isinstance(obj, Mana_Ui.Player2_Mana_Ui):
+                    obj.decrease_mana(50)
+                    break
         pass
 
     def do(self):
@@ -945,6 +956,11 @@ class Zizou_Olympia_NomalSkill:
         self.Zizou_Olympia.skill_triggered = False
         if self.Zizou_Olympia.mana >= 50:
             self.Zizou_Olympia.mana -= 50
+            # Mana UI 업데이트
+            for obj in game_world.world[2]:
+                if isinstance(obj, Mana_Ui.Player2_Mana_Ui):
+                    obj.decrease_mana(50)
+                    break
         pass
 
     def do(self):
@@ -1369,6 +1385,11 @@ class Franzer_NomalSkill:
         self.Franzer.frameX = 0
         if self.Franzer.mana >= 50:
             self.Franzer.mana -= 50
+            # Mana UI 업데이트
+            for obj in game_world.world[2]:
+                if isinstance(obj, Mana_Ui.Player2_Mana_Ui):
+                    obj.decrease_mana(50)
+                    break
         pass
 
     def do(self):
