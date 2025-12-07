@@ -45,10 +45,8 @@ class Jondahl_Nomal_Skill_Attack:
         draw_x = self.x
         if self.face_dir < 0:
             img.composite_draw(0, 'h', draw_x, self.y, 222, 222)
-            draw_rectangle(*self.get_bb())
         else:
             img.draw(draw_x, self.y, 222, 222)
-            draw_rectangle(*self.get_bb())
     def update(self):
         # 애니메이션 길이와 프레임 타임을 소유자에서 가져와 계산
         length = self.frames_per_animation.get('Jondahl_NomalSkill_Attack', 1)
@@ -127,10 +125,8 @@ class Jondahl_Nomal_Skill_Attack2:
         draw_x = self.x
         if self.face_dir < 0:
             img.composite_draw(0, 'h', draw_x, self.y, 222, 222)
-            draw_rectangle(*self.get_bb())
         else:
             img.draw(draw_x, self.y, 222, 222)
-            draw_rectangle(*self.get_bb())
 
     def update(self):
         # 애니메이션 길이와 프레임 타임을 소유자에서 가져와 계산
