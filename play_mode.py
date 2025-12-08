@@ -9,6 +9,8 @@ import player2_character
 import Play_background
 import Hp_Ui
 import Mana_Ui
+import Exit_mode
+from sound_manager import sound_manager
 
 
 def handle_events():
@@ -48,6 +50,8 @@ def init():
     global player1, player2, background, player1_Hp, player2_Hp, player1_Mana, player2_Mana
 
     game_world.clear()
+    sound_manager.load_all()
+    sound_manager.play_loop('background', volume=32)
 
     background = Play_background.background()
     game_world.add_object(background, 0)
@@ -89,6 +93,16 @@ def update():
     game_world.update()
 
     game_world.handle_collision()
+
+    if player1_Hp.width <= 0:
+        # Player1의 체력이 0 이하 -> Player2 승리
+        Exit_mode.set_winner('player2')
+        game_framework.change_mode(Exit_mode)
+
+    elif player2_Hp.width <= 0:
+        # Player2의 체력이 0 이하 -> Player1 승리
+        Exit_mode.set_winner('player1')
+        game_framework.change_mode(Exit_mode)
 def draw():
     clear_canvas()
     game_world.render()
@@ -96,7 +110,7 @@ def draw():
 
 
 def finish():
+    sound_manager.stop('background')
     game_world.clear()
-
 def pause(): pass
 def resume(): pass
