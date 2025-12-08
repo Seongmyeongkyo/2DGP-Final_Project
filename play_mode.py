@@ -96,11 +96,13 @@ def update():
 
     if player1_Hp.width <= 0:
         # Player1의 체력이 0 이하 -> Player2 승리
+        sound_manager.stop('background')
         Exit_mode.set_winner('player2')
         game_framework.change_mode(Exit_mode)
 
     elif player2_Hp.width <= 0:
         # Player2의 체력이 0 이하 -> Player1 승리
+        sound_manager.stop('background')
         Exit_mode.set_winner('player1')
         game_framework.change_mode(Exit_mode)
 def draw():
@@ -110,7 +112,6 @@ def draw():
 
 
 def finish():
-    sound_manager.stop('background')
     game_world.clear()
 def pause(): pass
 def resume(): pass
