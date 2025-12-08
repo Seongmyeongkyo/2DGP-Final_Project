@@ -1,13 +1,14 @@
 import game_framework
 from pico2d import *
-
+from sound_manager import sound_manager
 winner = None
 
 def init():
     global image
     global running
     global font
-
+    sound_manager.load_all()
+    sound_manager.play_loop('exit', volume=60)
     image = load_image("./UI/" + "white_background" + ".png")
     running = True
     font = load_font("./FONT/neodgm.ttf", 200)
@@ -20,7 +21,7 @@ def finish():
     global image, font
     del image
     del font
-
+    sound_manager.stop('exit')
 
 def update():
     pass
